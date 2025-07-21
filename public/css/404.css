@@ -1,0 +1,47 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    max-height: 10000vh;
+    background-image: url('../img/wpp_ficha2.png');
+    background-size: cover;
+    backdrop-filter: brightness(.3) blur(3px);
+    padding-bottom: 30px;
+}
+
+.error {
+    font-family: 'Chau Philomene One', sans-serif;
+    color: #ffbf00;
+    filter: drop-shadow(3px 3px 1px #000);
+}
+
+h1 {
+    font-family: 'Chau Philomene One', sans-serif;
+    color: #ffbf00;
+    filter: drop-shadow(3px 3px 1px #000);
+}
+
+.link-agendamentos {
+    position: absolute;
+    bottom: 15px;
+    left: 25px;
+}
+
+.ff-sora {
+    font-family: "Sora", sans-serif;
+}
+
+.link-agendamentos:hover {
+    transition: all 250ms ease;
+    transform: translateX(8px);
+    text-shadow: 3px 3px 5px #000000;
+}

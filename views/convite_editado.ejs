@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convite</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/convite.css">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chau+Philomene+One:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon">
+    <!-- Script.js -->
+     <script src="/js/convite.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row d-flex flex-row justify-content-center">
+            <div class="col">
+                <% let classeConvite="" ; %>
+                <% if (novosDados.promotor==="Paulo Cesar" ) { %>
+                    <% classeConvite="convitePaulo" ; %>
+                <% } else if (novosDados.promotor==="Talita Lima" ) { %>
+                    <% classeConvite="conviteTalita" ; %>
+                <% } else if (novosDados.promotor==="Vinicius Manzzato" ) { %>
+                    <% classeConvite="conviteVinicius" ; %>
+                <% } else if (novosDados.promotor==="Yan Bueno" ) { %>
+                    <% classeConvite="conviteYan" ; %>
+                <% } %>
+                <div class="col-12 col-sm-6 mainCard <%= classeConvite %>" id="mainCard">
+                    <div class="header">
+                        <h1>AGENDAMENTO</h1>
+                        <img src="/img/maisThermas.png" alt="maisTermasLogo"
+                            class="logoHeader">
+                        <h3>CONVIDADOS</h3>
+                    </div>
+
+                    <main>
+                        <div class="bgNomes">
+                            <span class="nomes" id="nomes">
+                                <% if (novosDados.nomesAgendamento===null || novosDados.nomesAgendamento==='undefined' ) { %>
+                                    <span> </span>
+                                <% } else { %>
+                                    <%= novosDados.nomesAgendamento %>
+                                <% } %>
+                            </span>
+                        </div>
+
+                        <br><br>
+                        <div class="bgInfo mb-auto">
+                            <span class="local mb-1"><span class="bold">Local</span>:
+                                Sala VIP</span>
+                            <br>
+                            <span class="data mb-1">
+                                <% if (novosDados.horarioAgendamento==="" || novosDados.horarioAgendamento==null) { %>
+                                    <span class="bold">Data:</span>
+                                    <%= new Date(novosDados.dataAgendamento).toLocaleDateString('pt-BR',{ timeZone: 'UTC' }) %>
+                                <% } else { %>
+                                    <span class="bold">Data e Horário:</span>
+                                        <%= new Date(novosDados.dataAgendamento).toLocaleDateString('pt-BR',{ timeZone: 'UTC' }) %> 
+                                            às <%= novosDados.horarioAgendamento.slice(0, 5) %>h
+                                <% } %>
+                            </span>
+                            <br>
+                            <span class="mb-1 promotor">
+                                <span class="bold" id="promotor">Promotor</span>: <%= novosDados.promotor %>
+                            </span>
+                        </div>
+                    </main>
+
+                    <footer>
+                        <img src="/img/thermas-logo.png" alt="ThermasDeSaoPedro"
+                            class="logoThermas">
+                    </footer>
+                </div>
+            </div>
+        </div>
+        <a href="/" class="nav-link text-white fs-6 ff-sora link-cadastro fw-light">
+            <i class="bi bi-arrow-left fs-6 text-white "></i> Agendar
+        </a>
+        <a href="/agendamentos" class="nav-link text-white fs-6 link-agendamentos ff-sora fw-light">
+            <i class="bi bi-list fs-6"></i> Agendamentos
+        </a>
+        <button class="d-none d-lg-inline btn border-0 bg-transparent btn-fullscreen" id="btn-fullscreen" onclick="fullscreen()">
+            <i class="bi bi-arrows-fullscreen fs-4"></i>
+        </button>
+    </div>
+</body>
+
+</html>

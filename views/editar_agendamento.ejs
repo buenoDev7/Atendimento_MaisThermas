@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edição de Dados do Agendamento</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/editarAgendamento.css">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chau+Philomene+One:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row text-center">
+            <p class="mb-2 mt-5">
+                <img src="/img/maisThermas.png" class="maisThermas-header">
+            </p>
+            <h1 class="ff-philomene yellow display-5 mt-2">EDITAR AGENDAMENTO</h1>
+        </div>
+        <!-- Form de cadastro de dados para o agendamento -->
+        <div class="row justify-content-center mt-3">
+            <div class="col-8">
+                <form action="/editar_agendamento" method="post" class="form-control form-style px-3 py-2">
+                    <!-- Linha 1 -->
+                    <div class="row">
+                        <!-- Id do Agendamento -->
+                         <input type="hidden" name="idAgendamento" value="<%= agendamento.id %>">
+                        <!-- Nomes -->
+                        <div class="col-6">
+                            <label for="nomesAgendamento" class="form-label fs-6 fw-semibold mb-1">Nomes:</label>
+                            <input type="text" class="form-control bg-transparent text-white" name="nomesAgendamento"
+                                required autocomplete="off" id="nomesAgendamento" placeholder="Ex.: Fulano da Silva" value="<%= agendamento.nomesAgendamento %>">
+                        </div>
+                        <!-- Horário -->
+                        <div class="col-6">
+                            <label for="horarioAgendamento" class="form-label fs-6 fw-semibold mb-1">Horário:</label>
+                            <input type="time" class="form-control bg-transparent text-white" name="horarioAgendamento" value="<%= agendamento.horarioAgendamento %>"
+                                autocomplete="off" id="horarioAgendamento">
+                        </div>
+                    </div>
+                    <!-- Linha 2 -->
+                    <div class="row mt-1">
+                        <div class="col-6">
+                            <label for="dataAgendamento" class="form-label fs-6 fw-semibold mb-1">Data:</label>
+                            <input type="date" class="form-control bg-transparent text-white" name="dataAgendamento" value="<%= agendamento.dataAgendamento %>" min="1900-01-01" max="2099-12-31"
+                                required autocomplete="off" id="dataAgendamento">
+                        </div>
+                        <div class="col-6">
+                            <label for="promotor" class="form-label fs-6 fw-semibold mb-1">Promotor:</label>
+                            <input list="promotores" id="promotor" name="promotor" value="<%= agendamento.promotor %>"
+                                class="form-control bg-transparent text-white" placeholder="Selecione o Promotor"
+                                required autocomplete="off">
+
+                            <datalist id="promotores" class="text-white">
+                                <option value="Paulo Cesar">
+                                <option value="Talita Lima">
+                                <option value="Yan Bueno">
+                            </datalist>
+
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-success mt-2 fw-semibold">Salvar</button>
+                        </div>
+                        <div class="col-auto">
+                            <a href="/agendamentos" class="btn btn-danger mt-2 fw-semibold">Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <a href="/agendamentos" class="nav-link text-white fs-6 link-agendamentos ff-sora fw-light">
+           <i class="bi bi-list fs-6"></i> Agendamentos
+        </a>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background-image: url('../img/wpp_ficha2.png');
+    background-size: cover;
+    backdrop-filter: blur(4px) brightness(.2);
+    height: 100%;
+}
+
+.maisThermas-header {
+    width: 200px;
+    filter: drop-shadow(6px 6px 1px black);
+}
+
+.ff-philomene {
+    font-family: "Chau Philomene One", sans-serif;
+}
+
+.ff-sora {
+    font-family: "Sora", sans-serif;
+}
+
+.yellow {
+    color: #ffbf00;
+    filter: drop-shadow(3px 3px 1px #000);
+}
+
+.form-style {
+    background: linear-gradient(0deg, rgba(8, 13, 14, 1) 0%, rgba(9, 27, 33, 1) 39%, rgba(6, 57, 74, 1) 100%);
+    filter: drop-shadow(13px 14px 20px black);
+    color: #e3e3e3;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+#nomesAgendamento::placeholder,
+#horarioAgendamento::placeholder,
+#promotor::placeholder{
+    color: #e3e3e3;
+}
+
+.row-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+    max-width: 80vw;
+}
+
+.link-agendamentos:hover {
+    transition: all 250ms ease-out;
+    transform: translateX(10px);
+    color: rgb(71, 234, 71) !important;
+}
+
+.link-lista-atendimentos:hover {
+    transition: all 250ms ease-out;
+    transform: translateX(10px);
+    color: rgb(71, 234, 71) !important;
+}
+
+@media (max-width: 500px) {
+    .row-links {
+        position: absolute;
+        bottom: 20px;
+        max-width: 100vw
+    }
+}

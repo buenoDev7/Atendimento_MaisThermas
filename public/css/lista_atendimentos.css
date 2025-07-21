@@ -1,0 +1,209 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background-image: url('../img/wpp_ficha2.png');
+    background-size: cover;
+    backdrop-filter: blur(4px) brightness(.3);
+    min-height: 100%;
+    max-height: fit-content;
+    padding-bottom: 75px;
+    overflow-x: hidden;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background-image: url('../img/wpp_ficha2.png');
+    background-size: cover;
+    backdrop-filter: blur(4px) brightness(.2);
+    min-height: 100%;
+    max-height: fit-content;
+    padding-bottom: 75px;
+    overflow-x: hidden;
+}
+
+.dropdown-toggle::after {
+    color: #e3e3e3 !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}
+
+.btn-filtro {
+    position: relative;
+    right: 30px;
+}
+
+.btn-buscar-data:hover {
+    color: #b4b4b4 !important;
+}
+
+.link-relatorios {
+    position: absolute;
+    right: 40px;
+    top: 30px;
+}
+
+.link-relatorios:hover {
+    transition: all 250ms ease-out;
+    transform: translateX(-10px);
+    color: rgb(71, 234, 71) !important;
+}
+
+.row-links {
+    position: absolute;
+    bottom: 20px;
+}
+
+.link-atendimento:hover {
+    color: #b4b4b4 !important;
+    cursor: pointer;
+}
+
+
+.link-cadastro:hover {
+    transition: all 250ms ease-out;
+    transform: translateX(10px);
+    color: rgb(71, 234, 71) !important;
+}
+
+
+.link-agendamentos:hover {
+    transition: all 250ms ease-out;
+    transform: translateX(10px);
+    color: rgb(71, 234, 71) !important;
+}
+
+.link-top:hover {
+    color: #b4b4b4 !important;
+}
+
+.maisThermas-header {
+    width: 90px;
+}
+
+.cor-paulo {
+    background-color: #004DB3;
+}
+
+.cor-talita {
+    background-color: #ae107c;
+}
+
+.cor-vinicius {
+    background-color: #02b5bb;
+}
+
+.cor-yan {
+    background-color: #3D4F5B;
+}
+
+.cor-padrao {
+    background-color: #cccccc;
+}
+
+.ff-philomene {
+    font-family: "Chau Philomene One", sans-serif;
+}
+
+.ff-sora {
+    font-family: "Sora", sans-serif;
+}
+
+.yellow {
+    color: #ffbf00;
+    filter: drop-shadow(3px 3px 1px #000);
+}
+
+.light-green {
+    color: rgb(27, 240, 27);
+}
+
+.edit-item:hover {
+    color: #ffbf00 !important;
+    transition: all 450ms ease;
+}
+
+.del-item {
+    position: relative;
+    bottom: 3px;
+}
+
+.del-item:hover {
+    color: red !important;
+    transition: all 450ms ease;
+}
+
+.modal-dialog {
+    position: relative;
+    top: 10%;
+    border-radius: 14px;
+    border: 4px solid #992f3b !important;
+}
+
+.input-del-item {
+    border: 2px solid #e3e3e3;
+    background-color: #212529;
+    color: #e3e3e3;
+    width: 80%;
+    height: 35px;
+    border-radius: 5px;
+    padding-left: 7px;
+    padding-bottom: 2px;
+}
+
+.input-del-item::placeholder {
+    color: #737373;
+}
+
+.input-del-item:not(:focus) {
+    transition: all 600ms ease;
+}
+
+.input-del-item:focus {
+    transition: all 300ms ease;
+    filter: drop-shadow(3px 3px 10px #992f3b);
+    outline: none !important;
+    border: 2px solid #992f3b;
+    background-color: #212529;
+    color: #e3e3e3;
+}
+
+.nome-atendimento {
+    text-transform: capitalize !important;
+    display: inline-block;
+    max-width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Media Queries */
+
+
+@media (max-width: 798px) {
+    .link-relatorios {
+        position: absolute;
+        right: 40px;
+        top: 18px;
+    }
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Atendimentos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/lista_atendimentos.css">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chau+Philomene+One:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon-list.png" type="image/x-icon">
+    <!-- Script.js -->
+     <script src="/js/lista_atendimentos.js"></script>
+</head>
+
+<body>
+    <% let dataAtual=new Date().toLocaleDateString('pt-BR'); %>
+        <div class="container-fluid" id="top">
+            <div class="row d-flex justify-content-center">
+                <div
+                    class="col-10 w-auto d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start mt-3 text-center text-md-start">
+                    <img src="/img/maisThermas.png" class="maisThermas-header me-3">
+                    <h2 class="ff-philomene yellow mt-3">
+                        <%= atendimentos.length %> <%= atendimentos.length===1 ? ' ATENDIMENTO' : ' ATENDIMENTOS' %> - <%= dataFiltradaFormatada%>
+                    </h2>
+
+                    <!-- Filtrar data de agendamentos -->
+                    <button class="btn bg-transparent border-0 p-0 dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="bi bi-funnel text-white ms-3 fs-3 yellow" data-bs-toggle="tooltip"
+                            title="Filtrar data" data-bs-placement="right"></i>
+                    </button>
+                    <!-- Dropdown de form pra filtrar a data -->
+                    <div class="dropdown col-auto">
+                        <ul class="dropdown-menu" data-bs-theme="dark">
+                            <li class="text-center pt-2">
+                                <span class="fw-semibold text-white fs-6">
+                                    <i class="bi bi-calendar text-white fs-6 me-1"></i> Selecione a data:
+                                </span>
+                            </li>
+                            <hr class="text-white">
+                            <li>
+                                <form action="filtrar_data_atendimentos" method="get"
+                                    class="form-control bg-transparent border-0">
+                                    <div class="row">
+                                        <div class="col-12 d-flex align-items-center">
+                                            <input type="date" name="dataFiltrada"
+                                                class="form-control input-filtrar-data" required min="1900-01-01"
+                                                max="2099-12-31">
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit"
+                                                class="btn btn-outline-success w-100 mt-2">Buscar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Link para relatórios -->
+                    <a href="/relatorio_atendimentos?<%= dataFiltrada ? `dataFiltrada=${dataFiltrada}` : '' %>" class="nav-link text-white fs-6 link-relatorios ff-sora fw-light">
+                        <i class="bi bi-file-earmark-bar-graph fs-4"></i> Relatório
+                    </a>
+                </div>
+                <div class="col-10 text-center d-flex flex-row justify-content-around mt-2 flex-nowrap">
+                    <% promotores.forEach(promotor=> { %>
+                        <div class="col-4">
+                            <span class="fs-6 text-white ff-sora">
+                                <%= promotor.promotor.split(' ')[0] %>:
+                            </span>
+                            <span class="fs-6 text-white ff-sora">
+                                <%= promotor.contagem %>
+                            </span>
+                        </div>
+                        <% }) %>
+                </div>
+                <hr class="text-white mt-3 w-75 text-center">
+            </div>
+
+            <div class="container-fluid px-5">
+                <% let i=1; %>
+                    <% atendimentos.forEach(atendimento=> { %>
+                        <div class="row d-flex flex-row justify-content-between align-items-center flex-nowrap">
+                            <div class="col-10">
+                                <span
+                                    class="link-atendimento nome-atendimento text-white fw-light ff-sora dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="me-2 light-green fs-5"> ✔ </span> 
+                                    <%= i++ %> - <%= atendimento.nomeCliente %> & <%= atendimento.conjuge %>
+                                </span>
+                                 <span class="d-inline-block rounded-circle ms-1 mb-2 <%= atendimento.classeCor %>"
+                                    style="width: 12px; height: 12px; cursor: pointer;" data-bs-toggle="tooltip"
+                                        data-bs-title="<%= atendimento.promotor %>" data-bs-placement="bottom">
+                                </span>
+                                <div class="dropdown">
+                                    <ul class="dropdown-menu" data-bs-theme="dark">
+                                        <li>
+                                            <a class="dropdown-item" href="/ficha/<%= atendimento.id %>">
+                                                <i class="bi bi-search text-white fs-6 me-1"></i> Ver Ficha de atendimento
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="col-auto p-0 me-3">
+                                <!-- Deletar atendimento -->
+                                <form action="del_atendimento" method="post" class="form-del-item bg-transparent border-0" data-id="<%= atendimento.id %>">
+                                    <a href="/atendimento/editar/<%= atendimento.id %>"
+                                        class="text-white text-decoration-none edit-item">
+                                        <i class="bi bi-pencil me-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar"></i>
+                                    </a>
+                                    <input type="hidden" name="idAtendimento" value="<%= atendimento.id %>">
+                                    <button type="button" class="btn bg-transparent p-0 btn-open-modal"
+                                        data-bs-toggle="modal" data-bs-target="#modalDelItem"
+                                        data-id="<%= atendimento.id %>">
+                                        <i class="bi bi-trash3 text-white del-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Excluir"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <% }) %>
+                            <div class="modal fade" id="modalDelItem" tabindex="-1" aria-labelledby="modalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog border-0">
+                                    <div class="modal-content bg-dark">
+                                        <div class="modal-header d-flex flex-column align-items-start border-0">
+                                            <p class="text-white fs-4 mb-0" id="modalLabel">
+                                                <i class="bi bi-exclamation-circle fs-4 text-danger fw-semibold"></i>
+                                                Tem certeza?
+                                            </p>
+                                            <p class="text-danger mb-0">Essa ação não poderá ser desfeita</p>
+                                        </div>
+                                        <div class="modal-body border-0">
+                                            <label for="inputDelItem" class="text-white fw-semibold mb-3">
+                                                > Digite 'deletar' para confirmar a exclusão
+                                            </label>
+                                            <input type="text" class="input-del-item" id="inputDelItem"
+                                                placeholder="deletar">
+                                        </div>
+                                        <div class="modal-footer border-0 d-flex justify-content-start">
+                                            <button type="button"
+                                                class="btn btn-outline-danger btn-confirm-del">Confirmar
+                                                exclusão</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            </div>
+            <div class="row d-flex flex-row justify-content-around align-items-center text-center row-links w-100">
+                <div class="col-3">
+                    <a href="/" class="nav-link text-white fs-6 link-cadastro ff-sora fw-light">
+                        <i class="bi bi-plus fs-6"></i>Agendar
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="/agendamentos" class="nav-link text-white fs-6 link-agendamentos ff-sora fw-light">
+                        <i class="bi bi-list-nested fs-6 me-1"></i>Ver agendamentos
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="#top" class="nav-link text-white fs-6 link-top ff-sora fw-light">
+                        <i class="bi bi-arrow-up text-white fs-6"></i> Voltar ao Topo
+                    </a>
+                </div>
+            </div>
+        </div>
+</body>

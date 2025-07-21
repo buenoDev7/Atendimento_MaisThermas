@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha de Atendimento MaisThermas </title>
+  <!-- CSS BOOTSTRAP -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- JS BOOTSTRAP -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <!-- ICONS BOOTSTRAP -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/atendimento.css">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chau+Philomene+One:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="/img/favicon-ficha.png" type="image/x-icon">
+</head>
+
+<body>
+  <%
+        const agora = new Date();
+
+        const dia = String(agora.getDate()).padStart(2, '0');
+        const mes = String(agora.getMonth() + 1).padStart(2, '0');
+        const ano = agora.getFullYear();
+
+        const hora = String(agora.getHours()).padStart(2, '0');
+        const minutos = String(agora.getMinutes()).padStart(2, '0');
+
+        const dataHoraFormatada = `${dia}/${mes}/${ano} - ${hora}:${minutos}`;
+    %>
+  <div class="col-1 w-auto text-start link-top">
+    <a href="/atendimentos" class="btn mt-1 ms-3" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Voltar">
+      <i class="bi bi-arrow-left pe-1 fs-3 text-white"></i>
+    </a>
+  </div>
+  <div class="row d-flex justify-content-center title-top w-100 mb-3">
+    <div class="col-10 d-flex align-items-center justify-content-center">
+      <img src="/img/maisThermas.png" class="maisThermas-header me-3">
+      <h3 class="text-center mt-2 ">Editar Atendimento - <%= atendimento.nomeCliente %> e <%= atendimento.conjuge %></h3>
+    </div>
+  </div>
+  <div class="container container-frente pt-2">
+    <div class="container-form pb-0">
+      <div class="print-page">
+        <form action="/ficha_atendimento" method="POST" class="form-control p-3 mt-2 form-ficha bg-white" id="formFicha">
+          <input type="hidden" name="idFicha" id="idFicha" value="<%= atendimento.id %>">
+          <!-- Linha 1 -->
+          <div class="row g-1 px-2">
+            <img src="/img/thermas-logo.png" class="logo-header pb-2">
+            <!-- Input Base -->
+            <div class="col-3 ps-3">
+              <p class="fs-7 mb-1 fw-semibold">Base:</p>
+              <input type="text" id="inputBase" name="base" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.base %>">
+            </div>
+            <!-- Input Brinde -->
+            <div class="col-2">
+              <p class="fs-7 mb-1 fw-semibold">Brinde:</p>
+              <input type="text" name="brinde" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.brinde %>">
+            </div>
+            <!-- Input DataHora -->
+            <div class="col">
+              <p class="fs-7 mb-1 fw-semibold">Data/Hora: <span class="text-danger">*</span></p>
+              <input type="datetime" name="dataHora" class="form-control form-control-sm rounded-3" autocomplete="off" required value="<%= dataHoraFormatada %>">
+            </div>
+            <!-- Fim da Linha 1 -->
+          </div>
+
+          <!-- Linha 2 -->
+          <div class="row g-1 px-2">
+            <div class="col-2 ms-4">
+              <!-- Espaço em branco para organização de layout -->
+            </div>
+            <!-- Input Promotor de Marketing -->
+            <div class="col">
+              <p class="fs-7 mb-1 fw-semibold">Promotor de Marketing:</p>
+              <input type="text" name="promotor" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.promotor %>">
+            </div>
+            <!-- Input Captador Guarany -->
+            <div class="col">
+              <p class="fs-7 mb-1 fw-semibold">Captador Guarany</p>
+              <input list="nomesCaptadores" id="captadorGuarany" name="captadorGuarany" class="form-control form-control-sm rounded-3 border-black fs-7"  value="<%= atendimento.captadorGuarany %>">
+              <datalist id="nomesCaptadores">
+                <option value="Alessandra Pires De Oliveira">
+                <option value="Amanda Gonçalves De Lima">
+                <option value="Ana Paula Oliveira Braga">
+                <option value="Andressa Pires De Oliveira">
+                <option value="Andrey Mansur De Andrade">
+                <option value="Antony Alex Dos Santos">
+                <option value="Antony Mansur De Andrade">
+                <option value="Andreia De Fátima Argentino">
+                <option value="Bruno Eduardo Grazzini De Castro">
+                <option value="Bruno Moises Nogueira Pinto">
+                <option value="Cassio Augusto De Paula Barbosa">
+                <option value="Caue Geraldo Luiz">
+                <option value="Christian Laranjeira Dos Santos">
+                <option value="Claudio De Oliveira Pereira">
+                <option value="Diego Ricardo Dos Santos">
+                <option value="Djeinnefer Moreira Otiles Balduíno">
+                <option value="Deivid Caetano Da Silva">
+                <option value="Eduardo Gabriel Bontorim De Andrade">
+                <option value="Flavio Henrique Marcondes">
+                <option value="Gabriel Motawh Baltieri">
+                <option value="Gabriele Ferreira Da Silva">
+                <option value="Guilherme Henrique Almeida Ramos">
+                <option value="Giovanni Ramos Milano">
+                <option value="Igor Nelson Santos De Moraes">
+                <option value="Jessica Sumaia Custodio De Bonfim">
+                <option value="Joao Lucas Paschoal Fernandes">
+                <option value="João Pedro De Matos Saia">
+                <option value="João Pedro De Souza Alencar Ivo">
+                <option value="João Victor Ferreira Rodrigues">
+                <option value="Jose Heraldo Conceição Bastos Junior">
+                <option value="Jose Nelson Santos Moraes">
+                <option value="Julia Eyer Da Cunha">
+                <option value="Julia Karolina Da Silva Bragaia">
+                <option value="Leticia Maria Callegaro Carrara">
+                <option value="Luana Tenorio Gomes">
+                <option value="Lucas De Souza Miranda">
+                <option value="Lucas Marotti Lopes">
+                <option value="Lucas Mauro Chamelet">
+                <option value="Lucas Vicente Martins Lopez">
+                <option value="Luciano Silva De Assis">
+                <option value="Luigi Barros Elias">
+                <option value="Luiz Henrique Dos Santos Azevedo">
+                <option value="Marcel Luiz De Cicco Milano">
+                <option value="Marcelo Donizete Baltieri">
+                <option value="Marcelo Drummond Fonseca">
+                <option value="Marcelo Vasconcelos Elias">
+                <option value="Marcio Luis Grazzini De Castro">
+                <option value="Matheus Reis Salgueiro Da Conceição">
+                <option value="Matheus Terra Ferreira Coutinho">
+                <option value="Mayra Teixeira Da Silva">
+                <option value="Meiriane Cordeiro De Jesus">
+                <option value="Mike Jhonatas Soares">
+                <option value="Patricia Carvalho Do Rosario">
+                <option value="Pedro Augusto Pires">
+                <option value="Raphael Luiz Ramos Milano">
+                <option value="Rhayana Cristina De Andrade Rocha">
+                <option value="Rogerio Eugenio De Medeiros Pereira">
+                <option value="Romenik Cardoso De Jesus">
+                <option value="Samuel Correa De Tolentino">
+                <option value="Soraya Dos Santos Brito">
+                <option value="Taina Caroline Geraldo Luiz">
+                <option value="Tatiana Pallu De Oliveira">
+                <option value="Thainara Goncalves Poppi">
+                <option value="Thiago Wei Wu">
+                <option value="Tiago Batista Santos">
+                <option value="Tiago Melim">
+                <option value="Vinicius Alves Brilho">
+                <option value="Victor Santos Gomes">
+                <option value="Wagner Pereira Baldim">
+                <option value="Walasson De Jesus Alves">
+                <option value="Wendel Guilherme Pradal">
+                <option value="Wesley Leonardo Moura Dos Santos">
+                <option value="Yago Lovato Felipe Sebastião">
+                <option value="Willem Rick Oliveira Olimpio">
+              </datalist>
+
+            </div>
+            <!-- Input Canal de Prospecção -->
+            <div class="col">
+              <p class="fs-7 mb-1 fw-semibold">Canal de Prospecção: <span class="text-danger">*</span></p>
+              <input list="listaCanais" id="canalProspeccao" name="canalProspeccao" class="form-control form-control-sm rounded-3" autocomplete="off" required value="<%= atendimento.canalProspeccao %>">
+              <datalist id="listaCanais">
+                <option value="Externo">
+                <option value="Your Vacation">
+                <option value="Parque">
+                <option value="Resort">
+                <option value="Tlmkt">
+              </datalist>
+            </div>
+          </div>
+          <!-- Fim da Linha 2 -->
+
+          <!-- Linha 3 -->
+          <div class="row g-1 px-2 mt-1">
+            <!-- Input Qtd. de Ingressos -->
+            <div class="col-3">
+              <p class="fs-7 mb-1 fw-semibold">Qtd. Ingressos:</p>
+              <input type="number" name="qtdIngressos" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.qtdIngressos %>">
+            </div>
+            <!-- Input Plataforma -->
+            <div class="col-3">
+              <p class="fs-7 mb-1 fw-semibold">Local da Compra:</p>
+              <input type="text" name="plataforma" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.plataforma %>">
+            </div>
+            <!-- Input Valor da Compra -->
+            <div class="col-3">
+              <p class="fs-7 mb-1 fw-semibold">Valor ingressos:</p>
+              <input type="text" name="valorIngressos" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.valorIngressos %>">
+            </div>
+            <!-- Input Data da Compra -->
+            <div class="col-3">
+              <p class="fs-7 mb-1 fw-semibold">Data da compra:</p>
+              <input type="date" name="dataCompra" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.dataCompra %>">
+            </div>
+          </div>
+          <!-- Fim da Linha 3 -->
+
+          <!-- Linha 4 -->
+          <div class="row g-1 px-2 mt-1 d-flex flex-row align-items-end">
+            <!-- Input Ratio - Já foi Sócio (sim/não) -->
+            <div class="col-3 mt-1">
+              <label class="form-label mb-1 fs-7 d-block fw-semibold">Já foram sócios?</label>
+              <div class="form-check form-check-inline m-0">
+                <input class="form-check-input mt-2" type="radio" name="jaFoiSocio" id="socioNao" value="socioNao" checked>
+                <label class="form-check-label fs-7 fw-semibold me-2" for="socioNao">Não</label>
+              </div>
+              <div class="form-check form-check-inline m-0">
+                <input class="form-check-input mt-2" type="radio" name="jaFoiSocio" id="socioSim" value="socioSim">
+                <label class="form-check-label fs-7 fw-semibold" for="socioSim">Sim:</label>
+              </div>
+            </div>
+            <!-- Input nº do Título -->
+            <div class="col-2">
+              <p class="fs-7 mb-1 fw-semibold">Nº do Título:</p>
+              <input type="number" name="numeroTitulo" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.numeroTitulo %>">
+            </div>
+            <!-- Input Nº de Visitas -->
+            <div class="col">
+              <p class="fs-7 mb-1 fw-semibold">Quantas vezes já vieram no Thermas? <span class="text-danger">*</span></p>
+              <input type="text" name="qtdVisitas" class="form-control form-control-sm rounded-3" autocomplete="off" required value="<%= atendimento.qtdVisitas %>">
+            </div>
+          </div>
+          <!-- Fim da Linha 4 -->
+
+          <!-- Linha 5 -->
+          <div class="row g-1 px-2 mt-1">
+            <!-- Input Nome do Cliente -->
+            <div class="col-9 mt-1">
+              <p class="fs-7 mb-1 fw-semibold">Nome: <span class="text-danger">*</span></p>
+              <input type="text" name="nomeCliente" class="form-control form-control-sm rounded-3" autocomplete="off" required value="<%= atendimento.nomeCliente %>">
+            </div>
+            <!-- Input Data de nascimento do Cliente -->
+            <div class="col">
+              <p class="fs-7 mb-1 fw-semibold">Dt. Nasc.: <span class="text-danger">*</span></p>
+              <input type="date" name="dataNasc1" class="form-control form-control-sm rounded-3" autocomplete="off" required value="<%= atendimento.dataNasc1 %>" min="1900-01-01" max="2099-12-31">
+            </div>
+          </div>
+          <!-- Fim da Linha 5 -->
+
+          <!-- Linha 6 -->
+          <div class="row g-1 px-2 pt-1">
+            <!-- Input Profissão do Cliente -->
+            <div class="col-6 mt-1">
+              <p class="fs-7 mb-1 fw-semibold">Profissão:</p>
+              <input type="text" name="profissao1" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.profissao1 %>">
+            </div>
+            <!-- Input Obs.: Profissão -->
+            <div class="col-6 mt-1">
+              <p class="fs-7 mb-1 fw-semibold">Obs. Profissão:</p>
+              <input type="text" name="obsProfissao1" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.obsProfissao1 %>">
+            </div>
+          </div>
+          <!-- Fim da Linha 6 -->
+
+          <!-- Linha 7 -->
+          <div class="row g-1 px-2 pt-1">
+            <!-- Input Nome Cônjuge -->
+            <div class="col-9 mt-1">
+              <p class="fs-7 mb-1 fw-semibold">Cônjuge:</p>
+              <input type="text" name="conjuge" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.conjuge %>">
+            </div>
+            <!-- Input Data de nascimento Cônjuge -->
+            <div class="col mt-1">
+              <p class="fs-7 mb-1 fw-semibold">Data Nasc.:</p>
+              <input type="date" name="dataNasc2" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.dataNasc2 %>">
+            </div>
+          </div>
+          <!-- Fim da Linha 7 -->
+
+          <!-- Linha 8 -->
+          <div class="row g-1 px-2 pt-1">
+            <!-- Input Profissão Cônjuge -->
+            <div class="col-6 mt-1">
+              <p class="fs-7 mb-1 fw-semibold">Profissão:</p>
+              <input type="text" name="profissao2" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.profissao2 %>">
+            </div>
+            <!-- Input Obs.: Profissão Cônjuge -->
+            <div class="col-6 mt-1 pb-1">
+              <p class="fs-7 mb-1 fw-semibold">Obs. Profissão:</p>
+              <input type="text" name="obsProfissao2" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.obsProfissao2 %>">
+            </div>
+          </div>
+          <!-- Fim da Linha 8 -->
+
+          <!-- Linha 9 -->
+          <div class="row g-1 px-2">
+            <!-- Input Estado civil -->
+            <div class="col-4">
+              <p class="fs-7 mb-1 fw-semibold">Estado Civil: <span class="text-danger">*</span></p>
+              <input list="listaEstadoCivil" id="estadoCivil" name="estadoCivil" class="form-control form-control-sm rounded-3" required autocomplete="off" value="<%= atendimento.estadoCivil %>">
+              <datalist id="listaEstadoCivil">
+                <option value="Casado(a)">
+                <option value="Solteiro(a)">
+                <option value="União Estável">
+                <option value="Divorciado(a)">
+                <option value="Viúvo(a)">
+              </datalist>
+            </div>
+            <!-- Input Tempo de Estado civil -->
+            <div class="col-5">
+              <p class="fs-7 mb-1 fw-semibold">Tempo de Estado Civil:</p>
+              <input type="text" name="tempoEstadoCivil" class="form-control form-control-sm rounded-3" autocomplete="off" required value="<%= atendimento.tempoEstadoCivil %>">
+            </div>
+            <!-- Input Tempo de Estado civil -->
+            <div class="col">
+              <p class="fs-7 mb-1 fw-semibold">Qtd. Filhos: <span class="text-danger">*</span></p>
+              <input type="number" name="qtdFilhos" class="form-control form-control-sm rounded-3" autocomplete="off" required value="<%= atendimento.qtdFilhos %>">
+            </div>
+          </div>
+          <!-- Fim da Linha 9 -->
+
+          <!-- Linha 10 -->
+          <div class="row g-1 px-2">
+            <div class="col-6 mt-1">
+              <!-- Input Cidade -->
+              <p class="fs-7 my-1 fw-semibold">Cidade: <span class="text-danger">*</span></p>
+              <input type="text" name="cidade" class="form-control form-control-sm rounded-3" autocomplete="off" required value="<%= atendimento.cidade %>">
+            </div>
+            <!-- Input -->
+            <div class="col-6 mt-1 pb-1">
+              <!-- Input Estado -->
+              <p class="fs-7 my-1 fw-semibold">Estado: <span class="text-danger">*</span></p>
+              <input type="text" name="estado" value="SP" class="form-control form-control-sm rounded-3" autocomplete="off" required>
+            </div>
+          </div>
+          <!-- Fim da Linha 10 -->
+
+          <!-- Linha 10 -->
+          <div class="row g-1 px-2 pb-1">
+            <!-- Input Tel. 1 -->
+            <div class="col-3">
+              <p class="fs-7 mb-1 fw-semibold">Tel. 1: <span class="text-danger">*</span></p>
+              <input type="text" name="tel1" class="form-control form-control-sm rounded-3" autocomplete="off" required value="<%= atendimento.tel1 %>">
+            </div>
+            <!-- Input Tel. 2 -->
+            <div class="col-3">
+              <p class="fs-7 mb-1 fw-semibold">Tel. 2:</p>
+              <input type="text" name="tel2" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.tel2 %>">
+            </div>
+            <!-- Input CPF da Compra -->
+            <div class="col">
+              <p class="fs-7 mb-1 fw-semibold">CPF da Compra:</p>
+              <input type="text" name="cpfCompra" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.cpfCompra %>">
+            </div>
+          </div>
+          <!-- Fim da Linha 10 -->
+
+          <!-- Linha 11 -->
+          <!-- Input Nome e idade dos filhos -->
+          <div class="row g-1 px-2">
+            <div class="col">
+              <p class="fs-7 mb-1 fw-semibold">Nome e idade dos filhos:</p>
+              <input type="text" name="nomeIdadeFilhos" class="form-control form-control-sm rounded-3" autocomplete="off" value="<%= atendimento.nomeIdadeFilhos %>">
+            </div>
+          </div>
+          <!-- Fim da Linha 11 -->
+
+          <!-- Linha 12 -->
+          <!-- Input Cartão -->
+          <div class="row g-1 px-2 mx-2 pt-1 mt-1 fs-7 border border-1 border-black border-black rounded-3">
+            <div class="col-12">
+              <label class="form-label fs-7 me-2 fw-semibold">Possui cartão de crédito? <span class="text-danger">*</span></label>
+              <input type="radio" name="cartao" id="nao" class="form-check-input" value="nao" autocomplete="off">
+              <label for="nao" class="form-label fw-semibold">Não</label>
+              <input type="radio" name="cartao" id="sim" class="form-check-input ms-2" autocomplete="off" value="sim" checked>
+              <label for="sim" class="form-label fw-semibold">Sim</label>
+
+              <label for="bandeiraVisa" class="form-label ms-5 fw-semibold">Visa
+                <input type="radio" name="bandeiraCartao" id="bandeiraVisa" class="form-check-input" value="Visa" autocomplete="off" checked>
+              </label>
+
+              <label for="bandeiraMaster" class="form-label ms-4 fw-semibold">Master
+                <input type="radio" name="bandeiraCartao" id="bandeiraMaster" class="form-check-input" autocomplete="off" value="Mastercard">
+              </label>
+
+              <label for="bandeiraElo" class="form-label ms-4 fw-semibold">Elo
+                <input type="radio" name="bandeiraCartao" id="bandeiraElo" class="form-check-input" value="Elo" autocomplete="off">
+              </label>
+
+              <label for="nq" class="form-label ms-4 fw-semibold">Sem cartão
+                <input type="radio" name="bandeiraCartao" id="nq" class="form-check-input" value="Sem Cartão" autocomplete="off">
+              </label>
+            </div>
+          </div>
+          <!-- Fim da Linha 12 -->
+
+          <!-- Linha 13 -->
+          <div class="row g-1 px-2 border border-1 border-black rounded-3 mx-2 mt-1">
+            <div class="col-8 fw-semibold">
+              <p class="fs-7 mb-1">
+                Quantos dias no mês saem a lazer? 1x (&nbsp;&nbsp;&nbsp;) 2x (&nbsp;&nbsp;&nbsp;) 3x
+                (&nbsp;&nbsp;&nbsp;) 4x ou + (&nbsp;&nbsp;&nbsp;)
+              </p>
+            </div>
+            <div class="col-4 text-start fw-semibold">
+              <p class="fs-7 mb-1">
+                Quanto gastam por passeio?
+              </p>
+            </div>
+          </div>
+          <!-- Fim da Linha 13 -->
+
+          <!-- Linha 14 -->
+          <div class="row g-1 px-2 border border-1 border-black rounded-3 mx-2 mt-1">
+            <div class="col-4 fw-semibold">
+              <p class="fs-7 mb-1">
+                Época que costumam passear?
+              </p>
+            </div>
+            <div class="col text-center fw-semibold">
+              <p class="fs-7 mb-1">
+                Durante a Semana (&nbsp;&nbsp;)
+              </p>
+            </div>
+            <div class="col text-center fw-semibold">
+              <p class="fs-7 mb-1">
+                Finais de Semana (&nbsp;&nbsp;)
+              </p>
+            </div>
+            <div class="col text-center fw-semibold">
+              <p class="fs-7 mb-1">
+                Nos Feriados (&nbsp;&nbsp )
+              </p>
+            </div>
+          </div>
+          <!-- Fim da Linha 14 -->
+
+          <!-- Linha 15 -->
+          <div class="row g-1 px-2 mx-2 border border-1 border-black rounded-3 mt-1">
+            <div class="col-6 w-auto fw-semibold">
+              <p class="fs-7 mb-1">
+                Possuem benefício de Lazer? Não (&nbsp;&nbsp;)&nbsp;Sim (&nbsp;&nbsp;)
+              </p>
+            </div>
+            <div class="col fw-semibold">
+              <p class="fs-7 mb-1">
+                - Já cotaram pra se associar na sua cidade? &nbsp;Não (&nbsp;&nbsp;) Sim (&nbsp;&nbsp;)
+              </p>
+            </div>
+          </div>
+          <!-- Fim da Linha 15 -->
+
+          <!-- Linha 16 -->
+          <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3">
+            <div class="col fw-semibold">
+              <p class="fs-7 mb-1">
+                Passeiam com: &nbsp;&nbsp; (&nbsp;&nbsp;) Só família &nbsp;&nbsp; (&nbsp;&nbsp;)
+                Parentes &nbsp;&nbsp; (&nbsp;&nbsp;) Amigos
+              </p>
+            </div>
+          </div>
+          <!-- Fim da Linha 16 -->
+
+          <!-- Linha 17 -->
+          <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3">
+            <div class="col fw-semibold">
+              <p class="fs-7 mb-1">
+                Se pudessem vir sempre para o Thermas, quantos dias no mês viriam? (&nbsp;) 1x
+                &nbsp;&nbsp; (&nbsp;&nbsp;) 2x &nbsp;&nbsp; (&nbsp;&nbsp;) 3x &nbsp;&nbsp;
+                (&nbsp;&nbsp;) 4x ou +
+              </p>
+            </div>
+          </div>
+          <!-- Fim da Linha 17 -->
+
+          <!-- Linha 18 -->
+          <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3">
+            <div class="col fw-semibold">
+              <p class="fs-7 mb-1">
+                Qual o perfil de diversão de vocês?
+              </p>
+            </div>
+          </div>
+          <!-- Fim da Linha 18 -->
+
+          <!-- Linha 19 -->
+          <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3">
+            <div class="col fw-semibold">
+              <p class="fs-7 mb-1">
+                Quem normalmente escolhe e organiza os passeios?
+              </p>
+            </div>
+          </div>
+          <!-- Fim da Linha 19 -->
+
+          <!-- Linha 20 -->
+          <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3 pb-2">
+            <label class="form-label fs-7 fw-semibold">
+              Observações:
+            </label>
+            <div class="col-12 fw-semibold">
+              <input type="text" name="observacoes" class="form-control form-control-sm border-0" id="inputObservacoes" autocomplete="off">
+            </div>
+          </div>
+          <!-- Fim da Linha 20 -->
+
+          <!-- Linha 21 -->
+          <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3">
+            <div class="col fw-semibold">
+              <p class="fs-7 mb-1 py-1">
+                Consultor de Diversão:
+              </p>
+            </div>
+          </div>
+          <!-- Fim da Linha 21 -->
+          <!-- Fim da Ficha -->
+          <!-- Botões -->
+          <div class="row mt-4 pt-1 row-buttons">
+            <!-- Salvar Ficha -->
+            <div class="col-4 w-auto text-start">
+              <button type="submit" class="btn mt-1" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Salvar informações" id="liveToastBtn">
+                <i class="bi bi-floppy pe-1 fs-3 text-dark"></i>
+              </button>
+            </div>
+            <!-- Voltar -->
+            <div class="col-2 text-start">
+              <a href="/atendimentos" class="btn mt-1" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Sair">
+                <i class="bi bi-door-open pe-1 fs-3 text-dark"></i>
+              </a>
+            </div>
+          </div>
+          <!-- Fim dos Botões -->
+          <input type="hidden" name="clienteAtendido" id="clienteAtendido" value="true">
+        </form>
+      </div>
+    </div>
+
+
+
+    <!-- Verso da Folha -->
+    <div class="print-page">
+      <div class="container container-verso w-auto mt-5 bg-white">
+        <div class="row mx-2 mt-5 d-block text-white"></div>
+      </div>
+    </div>
+
+    <script>
+      // → Tooltips de dicas dos botões de Imprimir, Salvar e Sair
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+</body>

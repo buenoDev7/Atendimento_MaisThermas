@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Atendimento - ID: <%= ficha.id %>
+    </title>
+    <!-- CSS BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- JS BOOTSTRAP -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <!-- ICONS BOOTSTRAP -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/ficha.css">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Chau+Philomene+One:ital@0;1&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon">
+</head>
+
+<body>
+    <% let dataHoraFormatada=new Date(ficha.dataHora).toLocaleString('pt-BR'); %>
+        <% let dataNasc1Formatada=new Date(ficha.dataNasc1).toLocaleDateString('pt-BR', { timeZone: 'UTC' }); %>
+            <% let dataNasc2Formatada=new Date(ficha.dataNasc2).toLocaleDateString('pt-BR', { timeZone: 'UTC' }); %>
+                <% let dataCompraFormatada=new Date(ficha.dataCompra).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    %>
+
+                    <div class="col-1 w-auto text-start link-top">
+                        <h1 class="text-center pt-5 title-top">
+                            Ficha - <%= ficha.nomeCliente %> e <%= ficha.conjuge %>
+                        </h1>
+                        <a href="/agendamentos" class="btn mt-1 ms-3" data-bs-toggle="tooltip" data-bs-placement="right"
+                            data-bs-title="Voltar">
+                            <i class="bi bi-arrow-left pe-1 fs-3 text-white"></i>
+                        </a>
+                    </div>
+                    <div class="container container-frente pt-2">
+                        <div class="container-form pb-0">
+                            <div class="print-page">
+                                <div class="form-control p-3 mt-2 form-ficha bg-white">
+                                    <!-- Linha 1 -->
+                                    <div class="row g-1 px-2">
+                                        <img src="/img/thermas-logo.png" class="logo-header pb-2">
+                                        <!-- Input Base -->
+                                        <div class="col-3 ps-3">
+                                            <p class="fs-7 mb-1 fw-semibold">Base:</p>
+                                            <input type="text" id="inputBase"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" value="<%= ficha.base %>" disabled>
+                                        </div>
+                                        <!-- Input Brinde -->
+                                        <div class="col-2">
+                                            <p class="fs-7 mb-1 fw-semibold">Brinde:</p>
+                                            <input type="text"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" value="<%= ficha.brinde %>" disabled>
+                                        </div>
+                                        <!-- Input DataHora -->
+                                        <div class="col">
+                                            <p class="fs-7 mb-1 fw-semibold">Data/Hora: <span
+                                                    class="text-danger">*</span></p>
+                                            <input type="text"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" required
+                                                value="<%= dataHoraFormatada.replace(',', ' -').slice(0, 18) %>"
+                                                disabled>
+                                        </div>
+                                        <!-- Fim da Linha 1 -->
+                                    </div>
+
+                                    <!-- Linha 2 -->
+                                    <div class="row g-1 px-2">
+                                        <div class="col-2 ms-4">
+                                            <!--  -->
+                                        </div>
+                                        <!-- Input Promotor de Marketing -->
+                                        <div class="col">
+                                            <p class="fs-7 mb-1 fw-semibold">Promotor de Marketing:
+                                            </p>
+                                            <input type="text" value="<%= ficha.promotor %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                        <!-- Input Captador Guarany -->
+                                        <div class="col">
+                                            <p class="fs-7 mb-1 fw-semibold">Captador Guarany:
+                                            </p>
+                                            <input type="text" value="<%= ficha.captadorGuarany%>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                        <!-- Input Canal de Prospecção -->
+                                        <div class="col">
+                                            <p class="fs-7 mb-1 fw-semibold">Canal de Prospecção: <span
+                                                    class="text-danger">*</span>
+                                            </p>
+                                            <input type="text" value="<%= ficha.canalProspeccao%>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 2 -->
+
+                                    <!-- Linha 3 -->
+                                    <div class="row g-1 px-2 mt-1">
+                                        <!-- Input Qtd. de Ingressos -->
+                                        <div class="col-3">
+                                            <p class="fs-7 mb-1 fw-semibold">Qtd. Ingressos:</p>
+                                            <input type="text" value="<%= ficha.qtdIngressos %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" value="<%= ficha.qtd_ingressos %>" disabled>
+                                        </div>
+                                        <!-- Input Plataforma -->
+                                        <div class="col-3">
+                                            <p class="fs-7 mb-1 fw-semibold">Local da Compra:</p>
+                                            <input type="text" value="<%= ficha.plataforma %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" value="<%= ficha.plataforma %>" disabled>
+                                        </div>
+                                        <!-- Input Valor da Compra -->
+                                        <div class="col-3">
+                                            <p class="fs-7 mb-1 fw-semibold">Valor ingressos:</p>
+                                            <input type="text" value="R$<%= ficha.valorIngressos.replace('.', ',')%>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" value="<%= ficha.valor_da_compra %>" disabled>
+                                        </div>
+                                        <!-- Input Data da Compra -->
+                                        <div class="col-3">
+                                            <p class="fs-7 mb-1 fw-semibold">Data da compra:</p>
+                                            <input type="text" value="<%= dataCompraFormatada %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 3 -->
+
+                                    <!-- Linha 4 -->
+                                    <div class="row g-1 px-2 mt-1 d-flex flex-row align-items-end">
+                                        <!-- Input Radio - Já foi Sócio (sim/não) -->
+                                        <div class="col-3 mt-1">
+                                            <label class="form-label mb-1 fs-7 d-block fw-semibold">Já foram
+                                                sócios?</label>
+                                            <input type="text" name="jaFoiSocio" id="jaFoiSocio" class="border-0"
+                                                value="<%= (ficha.jaFoiSocio === 'socioNao') ? 'Não' : 'Sim'  %>"
+                                                disabled>
+                                        </div>
+                                        <!-- Input nº do Título -->
+                                        <div class="col-2">
+                                            <p class="fs-7 mb-1 fw-semibold">Nº do Título:</p>
+                                            <input type="text" value="<%= ficha.numeroTitulo %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" disabled>
+                                        </div>
+                                        <!-- Input Nº de Visitas -->
+                                        <div class="col">
+                                            <p class="fs-7 mb-1 fw-semibold">Quantas vezes já vieram no Thermas? <span
+                                                    class="text-danger">*</span></p>
+                                            <input type="text" value="<%= ficha.qtdVisitas %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 4 -->
+
+                                    <!-- Linha 5 -->
+                                    <div class="row g-1 px-2 mt-1">
+                                        <!-- Input Nome do Cliente -->
+                                        <div class="col-9 mt-1">
+                                            <p class="fs-7 mb-1 fw-semibold">Nome: <span class="text-danger">*</span>
+                                            </p>
+                                            <input type="text" value="<%= ficha.nomeCliente %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                        <!-- Input Data de nascimento do Cliente -->
+                                        <div class="col">
+                                            <p class="fs-7 mb-1 fw-semibold">Dt. Nasc.: <span
+                                                    class="text-danger">*</span></p>
+                                            <input type="text" value="<%= dataNasc1Formatada %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 5 -->
+
+                                    <!-- Linha 6 -->
+                                    <div class="row g-1 px-2 pt-1">
+                                        <!-- Input Profissão do Cliente -->
+                                        <div class="col-6 mt-1">
+                                            <p class="fs-7 mb-1 fw-semibold">Profissão:</p>
+                                            <input type="text" value="<%= ficha.profissao1 %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" disabled>
+                                        </div>
+                                        <!-- Input Obs.: Profissão -->
+                                        <div class="col-6 mt-1">
+                                            <p class="fs-7 mb-1 fw-semibold">Obs. Profissão:</p>
+                                            <input type="text" value="<%= ficha.obsProfissao1 %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 6 -->
+
+                                    <!-- Linha 7 -->
+                                    <div class="row g-1 px-2 pt-1">
+                                        <!-- Input Nome Cônjuge -->
+                                        <div class="col-9 mt-1">
+                                            <p class="fs-7 mb-1 fw-semibold">Cônjuge:</p>
+                                            <input type="text" value="<%= ficha.conjuge %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" disabled>
+                                        </div>
+                                        <!-- Input Data de nascimento Cônjuge -->
+                                        <div class="col mt-1">
+                                            <p class="fs-7 mb-1 fw-semibold">Data Nasc.:</p>
+                                            <input type="text" value="<%= dataNasc2Formatada %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 7 -->
+
+                                    <!-- Linha 8 -->
+                                    <div class="row g-1 px-2 pt-1">
+                                        <!-- Input Profissão Cônjuge -->
+                                        <div class="col-6 mt-1">
+                                            <p class="fs-7 mb-1 fw-semibold">Profissão:</p>
+                                            <input type="text" value="<%= ficha.profissao2 %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" disabled>
+                                        </div>
+                                        <!-- Input Obs.: Profissão Cônjuge -->
+                                        <div class="col-6 mt-1 pb-1">
+                                            <p class="fs-7 mb-1 fw-semibold">Obs. Profissão:</p>
+                                            <input type="text" value="<%= ficha.obsProfissao2 %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 8 -->
+
+                                    <!-- Linha 9 -->
+                                    <div class="row g-1 px-2">
+                                        <!-- Input Estado civil -->
+                                        <div class="col-4">
+                                            <p class="fs-7 mb-1 fw-semibold">Estado Civil: <span
+                                                    class="text-danger">*</span></p>
+                                            <input type="text" value="<%= ficha.estadoCivil %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                        <!-- Input Tempo de Estado civil -->
+                                        <div class="col-5">
+                                            <p class="fs-7 mb-1 fw-semibold">Tempo de Estado Civil:</p>
+                                            <input type="text" value="<%= ficha.tempoEstadoCivil %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                        <!-- Input Tempo de Estado civil -->
+                                        <div class="col">
+                                            <p class="fs-7 mb-1 fw-semibold">Qtd. Filhos: <span
+                                                    class="text-danger">*</span></p>
+                                            <input type="text" value="<%= ficha.qtdFilhos %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 9 -->
+
+                                    <!-- Linha 10 -->
+                                    <div class="row g-1 px-2">
+                                        <div class="col-6 mt-1">
+                                            <!-- Input Cidade -->
+                                            <p class="fs-7 my-1 fw-semibold">Cidade: <span class="text-danger">*</span>
+                                            </p>
+                                            <input type="text" value="<%= ficha.cidade %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                        <!-- Input -->
+                                        <div class="col-6 mt-1 pb-1">
+                                            <!-- Input Estado -->
+                                            <p class="fs-7 my-1 fw-semibold">Estado: <span class="text-danger">*</span>
+                                            </p>
+                                            <input type="text" value="<%= ficha.estado %>" value="SP"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 10 -->
+
+                                    <!-- Linha 10 -->
+                                    <div class="row g-1 px-2 pb-1">
+                                        <!-- Input Tel. 1 -->
+                                        <div class="col-3">
+                                            <p class="fs-7 mb-1 fw-semibold">Tel. 1: <span class="text-danger">*</span>
+                                            </p>
+                                            <input type="text" value="<%= ficha.tel1 %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                        <!-- Input Tel. 2 -->
+                                        <div class="col-3">
+                                            <p class="fs-7 mb-1 fw-semibold">Tel. 2:</p>
+                                            <input type="text" value="<%= ficha.tel2 %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" disabled>
+                                        </div>
+                                        <!-- Input CPF da Compra -->
+                                        <div class="col">
+                                            <p class="fs-7 mb-1 fw-semibold">CPF da Compra:</p>
+                                            <input type="text" value="<%= ficha.cpfCompra %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent"
+                                                autocomplete="off" disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 10 -->
+
+                                    <!-- Linha 11 -->
+                                    <!-- Input Nome e idade dos filhos -->
+                                    <div class="row g-1 px-2">
+                                        <div class="col">
+                                            <p class="fs-7 mb-1 fw-semibold">Nome e idade dos filhos:</p>
+                                            <input type="text" value="<%= ficha.nomeIdadeFilhos %>"
+                                                class="form-control form-control-sm rounded-3 bg-transparent text-capitalize"
+                                                autocomplete="off" disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 11 -->
+
+                                    <!-- Linha 12 -->
+                                    <!-- Input Cartão -->
+                                    <div
+                                        class="row g-1 px-2 mx-2 pt-1 mt-1 fs-7 border border-1 border-black border-black rounded-3">
+                                        <div class="col-12">
+                                            <label class="form-label fs-7 me-2 fw-semibold">Possui cartão de crédito?
+                                                <span class="text-danger">*</span></label>
+                                            <span>
+                                                <% if (ficha.cartao==='SIM' || ficha.cartao==='Sim' || ficha.cartao==='sim' || ficha.cartao==="" ) { %>
+                                                    Sim
+                                                    <% } else { %>
+                                                        Não
+                                                        <% } %>
+                                            </span> - <span>
+                                                <%= ficha.bandeiraCartao %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 12 -->
+
+                                    <!-- Linha 13 -->
+                                    <div class="row g-1 px-2 border border-1 border-black rounded-3 mx-2 mt-1">
+                                        <div class="col-8 fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                Quantos dias no mês saem a lazer? 1x (&nbsp;&nbsp;&nbsp;) 2x
+                                                (&nbsp;&nbsp;&nbsp;) 3x
+                                                (&nbsp;&nbsp;&nbsp;) 4x ou + (&nbsp;&nbsp;&nbsp;)
+                                            </p>
+                                        </div>
+                                        <div class="col-4 text-start fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                Quanto gastam por passeio?
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 13 -->
+
+                                    <!-- Linha 14 -->
+                                    <div class="row g-1 px-2 border border-1 border-black rounded-3 mx-2 mt-1">
+                                        <div class="col-4 fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                Época que costumam passear?
+                                            </p>
+                                        </div>
+                                        <div class="col text-center fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                Durante a Semana (&nbsp;&nbsp;)
+                                            </p>
+                                        </div>
+                                        <div class="col text-center fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                Finais de Semana (&nbsp;&nbsp;)
+                                            </p>
+                                        </div>
+                                        <div class="col text-center fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                Nos Feriados (&nbsp;&nbsp )
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 14 -->
+
+                                    <!-- Linha 15 -->
+                                    <div class="row g-1 px-2 mx-2 border border-1 border-black rounded-3 mt-1">
+                                        <div class="col-6 w-auto fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                Possuem benefício de Lazer? Não (&nbsp;&nbsp;)&nbsp;Sim (&nbsp;&nbsp;)
+                                            </p>
+                                        </div>
+                                        <div class="col fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                - Já cotaram pra se associar na sua cidade? &nbsp;Não (&nbsp;&nbsp;) Sim
+                                                (&nbsp;&nbsp;)
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 15 -->
+
+                                    <!-- Linha 16 -->
+                                    <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3">
+                                        <div class="col fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                Passeiam com: &nbsp;&nbsp; (&nbsp;&nbsp;) Só família &nbsp;&nbsp;
+                                                (&nbsp;&nbsp;)
+                                                Parentes &nbsp;&nbsp; (&nbsp;&nbsp;) Amigos
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 16 -->
+
+                                    <!-- Linha 17 -->
+                                    <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3">
+                                        <div class="col fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                Se pudessem vir sempre para o Thermas, quantos dias no mês viriam?
+                                                (&nbsp;) 1x
+                                                &nbsp;&nbsp; (&nbsp;&nbsp;) 2x &nbsp;&nbsp; (&nbsp;&nbsp;) 3x
+                                                &nbsp;&nbsp;
+                                                (&nbsp;&nbsp;) 4x ou +
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 17 -->
+
+                                    <!-- Linha 18 -->
+                                    <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3">
+                                        <div class="col fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                Qual o perfil de diversão de vocês?
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 18 -->
+
+                                    <!-- Linha 19 -->
+                                    <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3">
+                                        <div class="col fw-semibold">
+                                            <p class="fs-7 mb-1">
+                                                Quem normalmente escolhe e organiza os passeios?
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 19 -->
+
+                                    <!-- Linha 20 -->
+                                    <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3 pb-2">
+                                        <label class="form-label fs-7 fw-semibold">
+                                            Observações:
+                                        </label>
+                                        <div class="col-12 fw-semibold">
+                                            <input type="text" class="form-control form-control-sm border-0 bg-transparent"
+                                                id="inputObservacoes" autocomplete="off" value="<%= ficha.observacoes %>" disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 20 -->
+
+                                    <!-- Linha 21 -->
+                                    <div class="row g-1 px-2 mt-1 mx-2 border border-1 border-black rounded-3">
+                                        <div class="col fw-semibold">
+                                            <p class="fs-7 mb-1 py-1">
+                                                Consultor de Diversão:
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Fim da Linha 21 -->
+                                    <!-- Fim da Ficha -->
+                                    <!-- Botões -->
+                                    <div class="row mt-4 pt-1 row-buttons ms-2">
+                                        <!-- Editar Ficha -->
+                                        <div class="col-3 w-auto text-start">
+                                            <a href="/atendimento/editar/<%= ficha.id %>" class="p-0 btn mt-1"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                data-bs-title="Editar">
+                                                <i class="bi bi-pencil fs-3 text-dark"></i>
+                                            </a>
+                                        </div>
+                                        <!-- Imprimir Ficha -->
+                                        <div class="col-3 w-auto text-start">
+                                            <button type="button" class="p-0 btn mt-1" onclick="window.print()"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                data-bs-title="Imprimir ficha">
+                                                <i class="bi bi-printer pe-1 fs-3 text-dark"></i>
+                                            </button>
+                                        </div>
+                                        <!-- Finalizar atendimento -->
+                                        <div class="col-3 w-auto text-start">
+                                            <a href="/finalizar_atendimento/<%= ficha.id %>" class="p-0 btn mt-1" data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom" data-bs-title="Finalizar Atendimento">
+                                                <i class="bi bi-clipboard-check pe-1 fs-3 text-dark"></i>
+                                            </a>
+                                        </div>
+                                        <!-- Voltar -->
+                                        <div class="col-3 w-auto text-start">
+                                            <a href="/agendamentos" class="p-0 btn mt-1" data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom" data-bs-title="Sair">
+                                                <i class="bi bi-door-open pe-1 fs-3 text-dark"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- Fim dos Botões -->
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Verso da Folha -->
+                        <div class="print-page">
+                            <div class="container container-verso w-auto mt-5 bg-white">
+                                <div class="row mx-2 mt-5 d-block text-white"></div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <script>
+                        // → Tooltips de dicas dos botões de Imprimir, Salvar e Sair
+                        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                    </script>
+</body>
+
+</html>

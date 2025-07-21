@@ -1,0 +1,21 @@
+# Dependências
+/node_modules/
+
+# Logs
+*.log
+
+# Variáveis de ambiente e configs sensíveis
+.env
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Backups ou arquivos temporários
+*.tmp
+*.swp
+*.bak
+
+# Pastas de build (caso existam futuramente)
+dist/
+build/
