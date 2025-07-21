@@ -262,9 +262,10 @@ module.exports = {
             generoAcompanhante: req.body.generoAcompanhante,
             qualificacao: req.body.qualificacao,
             jaVisitou: req.body.jaVisitou,
-            motivoNQ: req.body.motivoNQ,
+            motivoDesqualificacao: req.body.motivoDesqualificacao,
             NC: req.body.NC,
             consultor: req.body.consultor,
+            consultorGuarany: req.body.consultorGuarany,
             toGuarany: req.body.toGuarany,
             observacao: req.body.observacao,
         };
