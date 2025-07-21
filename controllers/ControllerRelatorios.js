@@ -86,12 +86,6 @@ module.exports = {
             console.log('Atendimentos encontrados para', dataConsulta, ':', atendimentos.length);
             // console.log(atendimentos); // Descomente para ver os dados brutos
 
-            // Se não houver atendimentos, gere o relatório vazio (apenas cabeçalhos)
-            // e retorne. O problema anterior era o relatório não ser gerado *quando tinha dados*.
-            // Com essa correção, se não tiver dados, ele vai gerar um relatório vazio.
-            // Se o front-end esperar um JSON para "nenhum dado", você pode adicionar um if/else aqui.
-            // Para o seu problema atual, vamos garantir que ele gere o Excel sempre.
-
             // > Cria planilha Excel
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet('Atendimentos');

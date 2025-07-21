@@ -286,13 +286,18 @@ const Atendimento = connection.define('atendimento', {
         type: Sequelize.STRING,
         allowNull: true
     },
-
+    
     consultor: {
         type: Sequelize.STRING,
         allowNull: true
     },
-
+    
     toGuarany: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+
+    consultorGuarany: {
         type: Sequelize.STRING,
         allowNull: true
     },
