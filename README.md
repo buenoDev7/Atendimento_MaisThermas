@@ -4,7 +4,7 @@
 Sistema de agendamento, atendimento e geração de relatórios de clientes convidados a conhecer o Título MaisThermas, do Thermas Water Park de São Pedro, SP.
 
 ## ℹ️ Para que serve?
-Para agilizar e facilitar o processo de manipulação de informações dos clientes agendados.
+Agilizar e facilitar o processo de manipulação de informações dos clientes agendados.
 ## 🗂️ Estrutura do Projeto
 ```
 atendimento_maisthermas/
