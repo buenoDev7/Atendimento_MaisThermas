@@ -5,7 +5,7 @@ Sistema de agendamento, atendimento e geração de relatórios de clientes convi
 
 ## ℹ️ Para que serve?
 Para agilizar e facilitar o processo de manipulação de informações dos clientes agendados.
-# 🗂️ Estrutura do Projeto
+## 🗂️ Estrutura do Projeto
 ```
 atendimento_maisthermas/
 ├── controllers/
