@@ -80,7 +80,7 @@ const Atendimento = connection.define('atendimento', {
     },
 
     numeroTitulo: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: true
     },
 
