@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 const Agendamento = require('../models/ModelAgendamento');
 const Atendimento = require('../models/ModelAtendimento');
 module.exports = {
+    // > View da ficha de atendimento
     preencherFicha: (req, res) => {
         const idAgendamento = req.params.idAgendamento
         Agendamento.findOne({
@@ -17,6 +18,7 @@ module.exports = {
         });
     },
 
+    // > Salva as informações preenchidas no Banco de Dados
     salvarFicha: (req, res) => {
         const {
             idFicha, base, brinde, dataHora, promotor, captadorGuarany,
@@ -27,6 +29,7 @@ module.exports = {
             nomeIdadeFilhos, cartao, bandeiraCartao, observacoes, clienteAtendido
         } = req.body;
 
+        // > Formatação de datas para formato DD/MM/AAAA - HH:MM:SS
         function isoFormat(dataInput) {
             if (!dataInput || !dataInput.includes(' - ')) return null;
             const [data, hora] = dataInput.split(' - ');
@@ -36,6 +39,7 @@ module.exports = {
 
         const dataHoraConvertida = isoFormat(dataHora);
 
+        // > Caso já existam dados, atualiza os campos. Senão, insere as informações preenchidas
         Atendimento.upsert({
             id: idFicha,
             base: base,
@@ -73,6 +77,7 @@ module.exports = {
             observacoes: observacoes,
             clienteAtendido: clienteAtendido
         }).then(() => {
+            // > Redireciona pra ficha de atendimento
             res.redirect(`/ficha/${idFicha}`);
         }).catch(err => {
             console.error(err);
@@ -80,6 +85,7 @@ module.exports = {
         });
     },
 
+    // > Busca a ficha de atendimento pelo ID
     exibirFicha: (req, res) => {
         const id = req.params.id;
         Atendimento.findByPk(id).then(ficha => {
@@ -95,6 +101,7 @@ module.exports = {
         });
     },
 
+    // > Lista os atendimentos
     atendimentos: (req, res) => {
         const coresPorPromotor = {
             'PAULO CESAR': 'cor-paulo',
@@ -110,7 +117,8 @@ module.exports = {
             'Yan Bueno': 'cor-yan',
             'yan bueno': 'cor-yan'
         };
-
+        
+        // > Tratamento e formatação de datas para formato DD/MM/AAAA
         const dataFiltrada = req.query.dataFiltrada || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
         const dataFiltradaFormatada = new Date(dataFiltrada).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 
@@ -157,6 +165,7 @@ module.exports = {
         });
     },
 
+    // > Exibe atendimentos pela data filtrada
     filtrar_data: (req, res) => {
         const dataFiltrada = req.query.dataFiltrada;
         const data = new Date(dataFiltrada);
@@ -166,6 +175,7 @@ module.exports = {
         const dataInicio = new Date(dataFiltrada + 'T00:00:00.000Z');
         const dataFim = new Date(dataFiltrada + 'T23:59:59.999Z');
 
+        // > Busca os atendimentos por promotor e pela data filtrada
         Atendimento.findAll({
             raw: true,
             attributes: ['promotor',
@@ -199,6 +209,7 @@ module.exports = {
 
     },
 
+    // > View para edição de ficha já preenchida
     editar_atendimento: (req, res) => {
         const idAtendimento = req.params.idAtendimento;
 
@@ -209,6 +220,7 @@ module.exports = {
         });
     },
 
+    // > Exclusão de atendimento
     excluir_atendimento: async (req, res) => {
         const idAtendimento = req.body.idAtendimento;
 
@@ -238,6 +250,7 @@ module.exports = {
         }
     },
 
+    // > View para finalização de atendimento. Busca pelo ID
     info_atendimento: (req, res) => {
         const idAtendimento = req.params.idAtendimento;
 
@@ -248,9 +261,10 @@ module.exports = {
         });
     },
 
+    // > Salva no Banco de dados as informações da finalização de atendimento
     finalizar_atendimento: (req, res) => {
+        // > Captura as informações do Body (HTML)
         const idAtendimento = req.body.idAtendimento;
-
         const info_finalizacao_atendimento = {
             idAtendimento,
             dataAtendimento: req.body.dataAtendimento,
@@ -270,6 +284,7 @@ module.exports = {
             observacao: req.body.observacao,
         };
 
+        // > Cria ou atualiza os campos correspondentes no BD
         Atendimento.update(info_finalizacao_atendimento, {
             where: {
                 id: idAtendimento

@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const db_connection = require('../database/db_connection');
 const Agendamento = db_connection.define('agendamento', {
+    // > Tabela de informações do Agendamento
     nomesAgendamento: {
         type: Sequelize.STRING,
         allowNull: false,

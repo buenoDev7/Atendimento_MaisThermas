@@ -9,13 +9,14 @@ module.exports = {
         res.render('cadastro');
     },
 
-    // > Grava as informações de agendamento no Banco de Dados
+    // > Captura as informações de agendamento do Body (HTML)
     salvar_agendamento: (req, res) => {
         const nomesAgendamento = req.body.nomesAgendamento;
         const dataAgendamento = req.body.dataAgendamento;
         const horarioAgendamento = req.body.horarioAgendamento;
         const promotor = req.body.promotor;
 
+        // > Salva as informações de agendamento no Banco de Dados
         Agendamento.create({
             nomesAgendamento: nomesAgendamento,
             horarioAgendamento: horarioAgendamento,
@@ -23,6 +24,7 @@ module.exports = {
             promotor: promotor
         }).then(agendamento => {
             console.log(`\n✅ Agendamento criado com sucesso!`);
+            // > Envia o usuário para o convite
             res.render('convite', {
                 agendamento: agendamento
             });
@@ -33,7 +35,7 @@ module.exports = {
 
     // > Lista todos os agendamentos, identificando por cores o promotor responsável pelo agendamento
     agendamentos: (req, res) => {
-       const coresPorPromotor = {
+        const coresPorPromotor = {
             'PAULO CESAR': 'cor-paulo',
             'Paulo Cesar': 'cor-paulo',
             'paulo cesar': 'cor-paulo',
@@ -51,7 +53,6 @@ module.exports = {
         // > Formatação de datas para formato DD/MM/AAAA
         let dataFiltrada = req.query.dataFiltrada;
         let dataConsulta = dataFiltrada || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
-
         let [ano, mes, dia] = dataConsulta.split('-');
         let dataFiltradaFormatada = `${dia}/${mes}/${ano}`;
 
@@ -66,7 +67,7 @@ module.exports = {
                 dataAgendamento: dataConsulta
             },
             group: ['promotor'],
-            order: [['contagem', 'DESC']]   
+            order: [['contagem', 'DESC']]
         }).then(promotores => {
             // >  Consulta os agendamentos
             Agendamento.findAll({
@@ -102,7 +103,7 @@ module.exports = {
     },
 
 
-
+    // > Exibe agendamentos com data filtrada
     filtrar_data: (req, res) => {
         const coresPorPromotor = {
             'PAULO CESAR': 'cor-paulo',
@@ -119,10 +120,12 @@ module.exports = {
             'yan bueno': 'cor-yan'
         };
 
+        // > Tratamento e formatação de datas para formato DD/MM/AAAA
         const dataFiltrada = req.query.dataFiltrada;
         const [ano, mes, dia] = dataFiltrada.split('-');
         const dataFiltradaFormatada = `${dia}/${mes}/${ano}`;
 
+        // > Busca todos os agendamentos por promotor
         Agendamento.findAll({
             raw: true,
             attributes: [
@@ -135,6 +138,7 @@ module.exports = {
             group: ['promotor'],
             order: [['contagem', 'DESC']]
         }).then(promotores => {
+            // > Busca os agendamentos por promotor e por data filtrada
             Agendamento.findAll({
                 raw: true,
                 where: {
@@ -157,6 +161,7 @@ module.exports = {
         });
     },
 
+    // > View para edição de informações do agendamento
     editar_agendamento: (req, res) => {
         const id = req.params.id
         Agendamento.findByPk(id).then(agendamento => {
@@ -166,7 +171,9 @@ module.exports = {
         });
     },
 
+    // > Registra a edição do agendamento no Banco de Dados
     salvar_edicao: (req, res) => {
+        // > Captura os novos dados no Body (HTML)
         let novosDados = {
             nomesAgendamento: req.body.nomesAgendamento,
             dataAgendamento: req.body.dataAgendamento,
@@ -174,11 +181,13 @@ module.exports = {
             promotor: req.body.promotor
         };
 
+        // > Registra as mudanças no BD
         Agendamento.update(novosDados, {
             where: {
                 id: req.body.idAgendamento
             }
         }).then(() => {
+            // > Redireciona pro convite editado
             console.log('\n✅ Informações salvas com sucesso!');
             res.render('convite_editado', {
                 novosDados
@@ -188,6 +197,7 @@ module.exports = {
         });
     },
 
+    // > Exclusão de agendamento + atendimento (caso exista)
     excluir_agendamento: async (req, res) => {
         const dataAgendamento = req.body.dataAgendamento;
         const idAgendamento = req.body.idAgendamento;

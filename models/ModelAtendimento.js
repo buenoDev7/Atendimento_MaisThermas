@@ -1,6 +1,7 @@
 const connection = require('../database/db_connection');
 const Sequelize = require('sequelize');
 const Atendimento = connection.define('atendimento', {
+    // > Tabela de informações do Atendimento
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,

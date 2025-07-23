@@ -7,13 +7,15 @@ function formatarDataBR(dataISO) {
     // > Recebe string YYYY-MM-DD (do DATEONLY), retorna DD/MM/YYYY
     // > Garante que dataISO é uma string antes do 'split'
     if (!dataISO || typeof dataISO !== 'string') {
-        return ''; // Retorna vazio ou outro valor padrão se a data for inválida
+        // > Retorna vazio ou outro valor padrão se a data for inválida
+        return '';
     }
     const [ano, mes, dia] = dataISO.split('-');
     return `${dia}/${mes}/${ano}`;
 }
 
 module.exports = {
+    // > Relatório de Agendamentos por data filtrada ou data atual
     relatorio_agendamentos: async (req, res) => {
         try {
             // > Data filtrada ou atual
@@ -67,6 +69,7 @@ module.exports = {
         }
     },
 
+    // > Relatório de Atendimentos por data filtrada ou data atual
     relatorio_atendimentos: async (req, res) => {
         try {
             let dataFiltrada = req.query.dataFiltrada;
