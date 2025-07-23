@@ -1,4 +1,5 @@
-![Logo](https://atendimento-maisthermas.onrender.com/img/maisThermas.png)
+![Logo](/img/maisThermas.png)
+
 
 # ⚙️ Atendimento MaisThermas
 Sistema de agendamento, atendimento e geração de relatórios de clientes convidados a conhecer o Título MaisThermas, do Thermas Water Park de São Pedro, SP.
