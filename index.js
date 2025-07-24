@@ -14,11 +14,18 @@ const app = express();
 
 // > Conexão com Banco de Dados
 const db_connection = require('./database/db_connection');
-db_connection.authenticate({ alter: true }).then(() => {
+
+db_connection.authenticate().then(() => {
   console.log('\n✅ Banco de dados conectado com sucesso!');
-}).catch((error) => {
-  console.log(`\n❌ Erro ao conectar com banco de dados!\n❌ ${error}`)
-});
+  return db_connection.sync({ alter: true });
+})
+  .then(() => {
+    console.log('✅ Models sincronizados com sucesso no banco de dados!');
+  })
+  .catch((error) => {
+    console.log(`\n❌ Erro ao conectar ou sincronizar com banco de dados!\n❌ ${error}`);
+  });
+
 
 // > EJS
 app.set('view engine', 'ejs');
