@@ -60,7 +60,7 @@ module.exports = {
             profissao1: profissao1,
             obsProfissao1: obsProfissao1,
             conjuge: conjuge,
-            dataNasc2,
+            dataNasc2: dataNasc2 || null,
             profissao2: profissao2,
             obsProfissao2: obsProfissao2,
             estadoCivil: estadoCivil,
