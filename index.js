@@ -14,7 +14,7 @@ const app = express();
 
 // > Conexão com Banco de Dados
 const db_connection = require('./database/db_connection');
-db_connection.authenticate().then(() => {
+db_connection.authenticate({ alter: true }).then(() => {
   console.log('\n✅ Banco de dados conectado com sucesso!');
 }).catch((error) => {
   console.log(`\n❌ Erro ao conectar com banco de dados!\n❌ ${error}`)

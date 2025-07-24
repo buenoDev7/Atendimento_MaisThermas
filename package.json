@@ -8,7 +8,7 @@
     "dev": "nodemon index.js"
   },
   "engines": {
-    "node": "22.3" 
+    "node": "22.3"
   },
   "author": "Yan Bueno",
   "license": "ISC",
@@ -21,6 +21,7 @@
     "moment": "^2.30.1",
     "mysql2": "^3.14.1",
     "nodemon": "^3.1.10",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "sequelize-cli": "^6.6.3"
   }
 }
