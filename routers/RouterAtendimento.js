@@ -11,11 +11,8 @@ router.post('/ficha_atendimento', ControllerAtendimento.salvarFicha);
 // > Exibir ficha preenchida
 router.get('/ficha/:id', ControllerAtendimento.exibirFicha);
 
-// > Exibir lista de atendimentos
-router.get('/atendimentos', ControllerAtendimento.atendimentos);
-
-// > Filtrar data dos agendamentos
-router.get('/filtrar_data_atendimentos', ControllerAtendimento.filtrar_data);
+// > Exibir lista de atendimentos por data atual e filtrada
+router.get('/atendimentos', ControllerAtendimento.listarAtendimentos);
 
 // > Excluir atendimento
 router.post('/del_atendimento', ControllerAtendimento.excluir_atendimento);

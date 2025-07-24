@@ -101,8 +101,8 @@ module.exports = {
         });
     },
 
-    // > Lista os atendimentos
-    atendimentos: (req, res) => {
+    // > Busca e filtra atendimentos por data e status de finalização
+    listarAtendimentos: async (req, res) => {
         const coresPorPromotor = {
             'PAULO CESAR': 'cor-paulo',
             'Paulo Cesar': 'cor-paulo',
@@ -117,96 +117,55 @@ module.exports = {
             'Yan Bueno': 'cor-yan',
             'yan bueno': 'cor-yan'
         };
-        
-        // > Tratamento e formatação de datas para formato DD/MM/AAAA
+
         const dataFiltrada = req.query.dataFiltrada || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
         const dataFiltradaFormatada = new Date(dataFiltrada).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 
-        // > Contagem de atendimentos por promotor
-        Atendimento.findAll({
-            raw: true,
-            attributes: ['promotor', [Sequelize.fn('COUNT', Sequelize.col('id')), 'contagem']],
-            where: {
-                dataHora: {
-                    [Op.between]: [
-                        new Date(dataFiltrada + 'T00:00:00.000Z'),
-                        new Date(dataFiltrada + 'T23:59:59.999Z')
-                    ]
-                }
-            },
-            group: ['promotor'],
-            order: [['contagem', 'DESC']]
-        }).then(promotores => {
-
-            // > Busca os atendimentos do dia filtrado
-            Atendimento.findAll({
-                raw: true,
-                where: {
-                    dataHora: {
-                        [Op.between]: [
-                            new Date(dataFiltrada + 'T00:00:00.000Z'),
-                            new Date(dataFiltrada + 'T23:59:59.999Z')
-                        ]
-                    }
-                },
-                order: [['id', 'ASC']]
-            }).then(atendimentos => {
-                const atendimentosComCor = atendimentos.map(a => ({
-                    ...a,
-                    classeCor: coresPorPromotor[a.promotor] || 'cor-padrao'
-                }));
-                res.render('lista_atendimentos', {
-                    atendimentos: atendimentosComCor,
-                    promotores,
-                    dataFiltrada,
-                    dataFiltradaFormatada
-                });
-            });
-        });
-    },
-
-    // > Exibe atendimentos pela data filtrada
-    filtrar_data: (req, res) => {
-        const dataFiltrada = req.query.dataFiltrada;
-        const data = new Date(dataFiltrada);
-        const dataFiltradaFormatada = data.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-
-        // Cria intervalo de data para o dia selecionado (00:00 até 23:59:59)
         const dataInicio = new Date(dataFiltrada + 'T00:00:00.000Z');
         const dataFim = new Date(dataFiltrada + 'T23:59:59.999Z');
 
-        // > Busca os atendimentos por promotor e pela data filtrada
-        Atendimento.findAll({
-            raw: true,
-            attributes: ['promotor',
-                [Sequelize.fn('COUNT', Sequelize.col('id')), 'contagem']
-            ],
-            where: {
-                dataHora: {
-                    [Op.between]: [dataInicio, dataFim]
-                }
-            },
-            group: ['promotor'],
-            order: [['contagem', 'DESC']]
-        }).then(promotores => {
-            Atendimento.findAll({
+        try {
+            // > Contagem de atendimentos finalizados por promotor
+            const promotores = await Atendimento.findAll({
+                raw: true,
+                attributes: ['promotor', [Sequelize.fn('COUNT', Sequelize.col('id')), 'contagem']],
+                where: {
+                    dataHora: {
+                        [Op.between]: [dataInicio, dataFim]
+                    },
+                    clienteAtendido: "true" // > Adiciona filtro para atendimentos finalizados
+                },
+                group: ['promotor'],
+                order: [['contagem', 'DESC']]
+            });
+
+            // > Busca os atendimentos finalizados do dia filtrado
+            const atendimentos = await Atendimento.findAll({
                 raw: true,
                 where: {
                     dataHora: {
                         [Op.between]: [dataInicio, dataFim]
-                    }
+                    },
+                    clienteAtendido: "true" // > Adiciona filtro para atendimentos finalizados
                 },
                 order: [['dataHora', 'ASC']]
-            }).then(atendimentos => {
-                res.render('lista_atendimentos', {
-                    atendimentos,
-                    promotores,
-                    dataFiltrada,
-                    dataFiltradaFormatada
-                });
             });
-        });
 
+            const atendimentosComCor = atendimentos.map(a => ({
+                ...a,
+                classeCor: coresPorPromotor[a.promotor] || 'cor-padrao'
+            }));
+
+            res.render('lista_atendimentos', {
+                atendimentos: atendimentosComCor,
+                promotores,
+                dataFiltrada,
+                dataFiltradaFormatada
+            });
+        } catch (error) {
+            console.error("Erro ao buscar atendimentos:", error);
+            res.status(500).send("Erro interno do servidor ao buscar atendimentos.");
+        }
     },
 
     // > View para edição de ficha já preenchida

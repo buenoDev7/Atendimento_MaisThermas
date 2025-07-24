@@ -50,7 +50,7 @@
                             </li>
                             <hr class="text-white">
                             <li>
-                                <form action="filtrar_data_atendimentos" method="get"
+                                <form action="/atendimentos" method="get"
                                     class="form-control bg-transparent border-0">
                                     <div class="row">
                                         <div class="col-12 d-flex align-items-center">
@@ -92,11 +92,14 @@
                     <% atendimentos.forEach(atendimento=> { %>
                         <div class="row d-flex flex-row justify-content-between align-items-center flex-nowrap">
                             <div class="col-10">
-                                <span
-                                    class="link-atendimento nome-atendimento text-white fw-light ff-sora dropdown-toggle"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="me-2 light-green fs-5"> ✔ </span> 
-                                    <%= i++ %> - <%= atendimento.nomeCliente %> & <%= atendimento.conjuge %>
+                                <span class="link-atendimento nome-atendimento text-white fw-light ff-sora dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="me-2 light-green fs-5"> ✔ </span>
+
+                                    <%= i++ %> - <%= atendimento.nomeCliente %>
+                                    
+                                    <% if (atendimento.conjuge && atendimento.conjuge.trim() !== '') { %>
+                                        & <%= atendimento.conjuge %>
+                                    <% } %>
                                 </span>
                                  <span class="d-inline-block rounded-circle ms-1 mb-2 <%= atendimento.classeCor %>"
                                     style="width: 12px; height: 12px; cursor: pointer;" data-bs-toggle="tooltip"

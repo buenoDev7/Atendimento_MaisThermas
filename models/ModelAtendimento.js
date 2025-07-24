@@ -225,12 +225,7 @@ const Atendimento = connection.define('atendimento', {
 
     clienteAtendido: {
         type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-            notEmpty: {
-                msg: 'O campo não pode ser vazio'
-            }
-        }
+        allowNull: true
     },
 
     // > Campos para finalização do atendimento. Permitem ser "NULL" pois não recebem valor inicialmente
