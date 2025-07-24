@@ -26,7 +26,7 @@ module.exports = {
             jaFoiSocio, numeroTitulo, qtdVisitas, nomeCliente, dataNasc1, profissao1,
             obsProfissao1, conjuge, dataNasc2, profissao2, obsProfissao2, estadoCivil,
             tempoEstadoCivil, qtdFilhos, cidade, estado, tel1, tel2, cpfCompra,
-            nomeIdadeFilhos, cartao, bandeiraCartao, observacoes, clienteAtendido
+            nomeIdadeFilhos, cartao, bandeiraCartao, observacoes
         } = req.body;
 
         // > Formatação de datas para formato DD/MM/AAAA - HH:MM:SS
@@ -74,8 +74,7 @@ module.exports = {
             nomeIdadeFilhos: nomeIdadeFilhos,
             cartao: cartao,
             bandeiraCartao: bandeiraCartao,
-            observacoes: observacoes,
-            clienteAtendido: clienteAtendido
+            observacoes: observacoes
         }).then(() => {
             // > Redireciona pra ficha de atendimento
             res.redirect(`/ficha/${idFicha}`);
@@ -241,6 +240,7 @@ module.exports = {
             consultorGuarany: req.body.consultorGuarany,
             toGuarany: req.body.toGuarany,
             observacao: req.body.observacao,
+            clienteAtendido: req.body.clienteAtendido
         };
 
         // > Cria ou atualiza os campos correspondentes no BD
