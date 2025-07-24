@@ -269,7 +269,7 @@ module.exports = {
             idAtendimento,
             dataAtendimento: req.body.dataAtendimento,
             idadeCliente: req.body.idadeCliente,
-            idadeAcompanhante: req.body.idadeAcompanhante,
+            idadeAcompanhante: req.body.idadeAcompanhante || 0,
             produto: req.body.produto,
             numeroContrato: req.body.numeroContrato,
             generoCliente: req.body.generoCliente,

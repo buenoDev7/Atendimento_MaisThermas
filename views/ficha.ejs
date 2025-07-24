@@ -222,7 +222,8 @@
                                         <!-- Input Data de nascimento Cônjuge -->
                                         <div class="col mt-1">
                                             <p class="fs-7 mb-1 fw-semibold">Data Nasc.:</p>
-                                            <input type="text" value="<%= dataNasc2Formatada %>"
+                                            <input type="text"
+                                                value="<%= ficha.dataNasc2 && new Date(ficha.dataNasc2).toLocaleDateString('pt-BR') !== '01/01/1970' ? new Date(ficha.dataNasc2).toLocaleDateString('pt-BR') : '' %>"
                                                 class="form-control form-control-sm rounded-3 bg-transparent"
                                                 autocomplete="off" disabled>
                                         </div>
