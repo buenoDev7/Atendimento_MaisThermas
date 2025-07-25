@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Agendamentos</title>
+    <title>[localhost] - Lista de Agendamentos</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap JS -->
@@ -31,7 +31,6 @@
                 <div
                     class="col-10 w-auto d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start mt-3 text-center text-md-start">
                     <img src="/img/maisThermas.png" class="maisThermas-header me-3">
-                    <!-- Contagem dos agendamentos -->
                     <h2 class="ff-philomene yellow mt-3">
                         <%= agendamentos.length %>
                         <%= agendamentos.length===1 ? ' AGENDAMENTO' : ' AGENDAMENTOS' %> - <%= dataFiltradaFormatada %>
@@ -74,7 +73,6 @@
                         <i class="bi bi-file-earmark-bar-graph fs-4"></i> Relatório
                     </a>
                 </div>
-                <!-- Exibição da contagem de agendamentos por promotor -->
                 <div class="col-10 text-center d-flex flex-row justify-content-around mt-2">
                     <% promotores.forEach(promotor=> { %>
                         <div class="col-3">
@@ -89,24 +87,26 @@
                 </div>
                 <hr class="text-white mt-3 w-75 text-center">
             </div>
-            <!-- Lista os agendamentos em um laço forEach -->
             <div class="container-fluid px-5">
                 <% let i=1; %>
                     <% agendamentos.forEach(agendamento=> { %>
                         <div class="row d-flex flex-row justify-content-between align-items-center flex-nowrap">
-                            <div class="col-10 d-flex flex-row flex-nowrap">
-                                <!-- Nomes dos agendamentos -->
-                               <span class="link-atendimento nome-agendamento text-white fw-light ff-sora dropdown-toggle <%= agendamento.classeTexto %>"
+                            <div class="col-10 d-flex flex-row flex-nowrap align-items-center">
+                                <span class="link-atendimento nome-agendamento text-white fw-light ff-sora dropdown-toggle <%= agendamento.classeTexto %>"
                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                    <%= i++ %> - <span data-bs-toggle="tooltip" data-bs-title="<%= agendamento.horarioAgendamento.slice(0, 5) %>" data-bs-placement="left"><%= agendamento.nomesAgendamento %></span>
+                                    <%= i++ %> - 
+                                    <span
+                                    data-bs-toggle="tooltip" 
+                                    data-bs-title="<%= agendamento.statusFinalizacao %>" 
+                                    data-bs-placement="left">
+                                    <%= agendamento.nomesAgendamento %>
+                                    </span>
                                 </span>
-                                <!-- Indicador de promotor por cor -->
                                 <span class="d-inline-block rounded-circle ms-2 mt-1 <%= agendamento.classeCor %>"
                                     style="width: 12px; height: 12px; cursor: pointer;" data-bs-toggle="tooltip"
                                         data-bs-title="<%= agendamento.promotor %>" data-bs-placement="bottom">
                                 </span>
 
-                                <!-- Dropdown de ações do agendamento -->
                                 <div class="dropdown">
                                     <ul class="dropdown-menu" data-bs-theme="dark">
                                         <li>
@@ -124,13 +124,11 @@
                                 </div>
                             </div>
                             <br><br>
-                            <!-- Deletar agendamento -->
                             <div class="col-auto p-0 me-3">
                                 <form action="del_item" method="post" class="form-del-item bg-transparent border-0"
                                     data-id="<%= agendamento.id %>">
                                     <input type="hidden" name="dataAgendamento"
                                         value="<%= agendamento.dataAgendamento %>">
-                                        <!-- Editar agendamento -->
                                     <a href="/agendamento/editar/<%= agendamento.id %>"
                                         class="text-white text-decoration-none edit-item" data-bs-toggle="tooltip"
                                         data-bs-title="Editar" data-bs-placement="bottom">
@@ -147,7 +145,6 @@
                             </div>
                         </div>
                         <% }) %>
-                        <!-- Modal de confirmação de exclusão do agendamento -->
                             <div class="modal fade" id="modalDelItem" tabindex="-1" aria-labelledby="modalLabel"
                                 aria-hidden="true">
                                 <div class="modal-dialog border-0">
@@ -162,33 +159,32 @@
                                         <div class="modal-body border-0">
                                             <label for="inputDelItem" class="text-white fw-semibold mb-3">
                                                 > Digite ' deletar' para confirmar a exclusão </label>
-                                    <input type="text" class="input-del-item" id="inputDelItem" placeholder="deletar">
-                        </div>
-                        <div class="modal-footer border-0 d-flex justify-content-start">
-                            <button type="button" class="btn btn-outline-danger btn-confirm-del">Confirmar
-                                exclusão</button>
-                        </div>
+                                            <input type="text" class="input-del-item" id="inputDelItem" placeholder="deletar">
+                                        </div>
+                                        <div class="modal-footer border-0 d-flex justify-content-start">
+                                            <button type="button" class="btn btn-outline-danger btn-confirm-del">Confirmar
+                                                exclusão</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            </div>
+            <div class="row d-flex flex-row justify-content-around align-items-center text-center row-links w-100 me-5">
+                <div class="col-3">
+                    <a href="/cadastro" class="nav-link text-white fs-6 link-cadastro ff-sora fw-light">
+                        <i class="bi bi-plus fs-6"></i>Agendar
+                    </a>
                 </div>
-            </div>
-        </div>
-        <!-- Link para agendar -->
-        <div class="row d-flex flex-row justify-content-around align-items-center text-center row-links w-100 me-5">
-            <div class="col-3">
-                <a href="/" class="nav-link text-white fs-6 link-cadastro ff-sora fw-light">
-                    <i class="bi bi-plus fs-6"></i>Agendar
-                </a>
-            </div>
-            <!-- Link para ver atendimentos -->
-            <div class="col-3">
-                <a href="/atendimentos" class="nav-link text-white fs-6 link-lista-atendimentos ff-sora fw-light">
-                    <i class="bi bi-list-nested fs-6 me-1"></i>Ver atendimentos
-                </a>
-            </div>
-            <!-- Voltar ao topo da página -->
-            <div class="col-3">
-                <a href="#top" class="nav-link text-white fs-6 link-top ff-sora fw-light">
-                    <i class="bi bi-arrow-up text-white fs-6"></i> Voltar ao Topo
-                </a>
+                <div class="col-3">
+                    <a href="/atendimentos" class="nav-link text-white fs-6 link-lista-atendimentos ff-sora fw-light">
+                        <i class="bi bi-list-nested fs-6 me-1"></i>Ver atendimentos
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="#top" class="nav-link text-white fs-6 link-top ff-sora fw-light">
+                        <i class="bi bi-arrow-up text-white fs-6"></i> Voltar ao Topo
+                    </a>
+                </div>
             </div>
         </div>
 

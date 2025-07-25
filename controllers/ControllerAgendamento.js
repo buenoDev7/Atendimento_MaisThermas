@@ -1,4 +1,3 @@
-// > Importa a tabela de agendamentos
 const Sequelize = require('sequelize');
 const Agendamento = require('../models/ModelAgendamento');
 const Atendimento = require('../models/ModelAtendimento');
@@ -69,7 +68,7 @@ module.exports = {
             group: ['promotor'],
             order: [['contagem', 'DESC']]
         }).then(promotores => {
-            // >  Consulta os agendamentos
+            // > Consulta os agendamentos
             Agendamento.findAll({
                 raw: true,
                 where: {
@@ -79,14 +78,15 @@ module.exports = {
             }).then(agendamentos => {
                 // > Consulta os atendimentos
                 Atendimento.findAll({ raw: true }).then(atendimentos => {
-                    const idsAtendidos = atendimentos.map(a => a.id);
-
                     const agendamentosComCor = agendamentos.map(a => {
-                        const atendido = idsAtendidos.includes(a.id);
+                        const atendimento = atendimentos.find(at => at.id === a.id);
+                        const atendido = !!atendimento;
+                        const finalizado = atendimento && atendimento.clienteAtendido === "true";
                         return {
                             ...a,
                             classeTexto: atendido ? 'texto-atendido' : '',
-                            classeCor: coresPorPromotor[a.promotor] || 'cor-padrao'
+                            classeCor: coresPorPromotor[a.promotor] || 'cor-padrao',
+                            statusFinalizacao: finalizado ? 'Finalizado' : 'Não finalizado'
                         };
                     });
 
@@ -101,7 +101,6 @@ module.exports = {
             });
         });
     },
-
 
     // > Exibe agendamentos com data filtrada
     filtrar_data: (req, res) => {
@@ -146,16 +145,25 @@ module.exports = {
                 },
                 order: [['horarioAgendamento', 'ASC']]
             }).then(agendamentos => {
-                const agendamentosComCor = agendamentos.map(a => ({
-                    ...a,
-                    classeCor: coresPorPromotor[a.promotor] || 'cor-padrao'
-                }));
+                // > Consulta os atendimentos
+                Atendimento.findAll({ raw: true }).then(atendimentos => {
+                    const agendamentosComCor = agendamentos.map(a => {
+                        const atendimento = atendimentos.find(at => at.id === a.id);
+                        const atendido = !!atendimento;
+                        const finalizado = atendimento && atendimento.clienteAtendido === "true";
+                        return {
+                            ...a,
+                            classeCor: coresPorPromotor[a.promotor] || 'cor-padrao',
+                            statusFinalizacao: finalizado ? 'Finalizado' : 'Não finalizado'
+                        };
+                    });
 
-                res.render('agendamentos', {
-                    agendamentos: agendamentosComCor,
-                    promotores,
-                    dataFiltrada,
-                    dataFiltradaFormatada
+                    res.render('agendamentos', {
+                        agendamentos: agendamentosComCor,
+                        promotores,
+                        dataFiltrada,
+                        dataFiltradaFormatada
+                    });
                 });
             });
         });
