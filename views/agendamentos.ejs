@@ -33,8 +33,7 @@
                     <img src="/img/maisThermas.png" class="maisThermas-header me-3">
                     <h2 class="ff-philomene yellow mt-3">
                         <%= agendamentos.length %>
-                            <%= agendamentos.length===1 ? ' AGENDAMENTO' : ' AGENDAMENTOS' %> - <%=
-                                    dataFiltradaFormatada %>
+                        <%= agendamentos.length===1 ? ' AGENDAMENTO' : ' AGENDAMENTOS' %> - <%= dataFiltradaFormatada %>
                     </h2>
 
                     <!-- Filtrar data de agendamentos -->
@@ -70,8 +69,7 @@
                         </ul>
                     </div>
                     <!-- Link para relatórios -->
-                    <a href="/relatorio_agendamentos?<%= dataFiltrada ? `dataFiltrada=${dataFiltrada}` : '' %>"
-                        class="nav-link text-white fs-6 link-relatorios ff-sora fw-light">
+                    <a href="/relatorio_agendamentos?<%= dataFiltrada ? `dataFiltrada=${dataFiltrada}` : '' %>" class="nav-link text-white fs-6 link-relatorios ff-sora fw-light">
                         <i class="bi bi-file-earmark-bar-graph fs-4"></i> Relatório
                     </a>
                 </div>
@@ -99,7 +97,7 @@
                                     <%= i++ %> - 
                                     <span
                                     data-bs-toggle="tooltip" 
-                                    data-bs-title="<%= agendamento.statusFinalizacao %>" 
+                                    data-bs-title="<%= agendamento.horarioAgendamento.slice(0, 5) %>" 
                                     data-bs-placement="left">
                                     <%= agendamento.nomesAgendamento %>
                                     </span>
@@ -108,66 +106,74 @@
                                     style="width: 12px; height: 12px; cursor: pointer;" data-bs-toggle="tooltip"
                                         data-bs-title="<%= agendamento.promotor %>" data-bs-placement="bottom">
                                 </span>
-                            <div class="dropdown">
-                                <ul class="dropdown-menu" data-bs-theme="dark">
-                                    <li>
-                                        <a class="dropdown-item" href="/atendimento/<%= agendamento.id %>">
-                                            <i class="bi bi-file-earmark-arrow-up text-white fs-6 me-1"></i>
-                                            Preencher Ficha
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="/ficha/<%= agendamento.id %>">
-                                            <i class="bi bi-search text-white fs-6 me-1"></i> Visualizar Ficha
-                                        </a>
-                                    </li>
-                                </ul>
+                                <span class="ms-2 <%= agendamento.statusFinalizacao === 'Finalizado' ? 'text-success' : 'text-warning' %>"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="<%= agendamento.statusFinalizacao %>"
+                                    data-bs-placement="right">
+                                    <i class="bi <%= agendamento.statusFinalizacao === 'Finalizado' ? 'bi-check-circle-fill' : 'bi-exclamation-circle-fill' %>"></i>
+                                </span>
+
+                                <div class="dropdown">
+                                    <ul class="dropdown-menu" data-bs-theme="dark">
+                                        <li>
+                                            <a class="dropdown-item" href="/atendimento/<%= agendamento.id %>">
+                                                <i class="bi bi-file-earmark-arrow-up text-white fs-6 me-1"></i>
+                                                Preencher Ficha
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="/ficha/<%= agendamento.id %>">
+                                                <i class="bi bi-search text-white fs-6 me-1"></i> Visualizar Ficha
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <br><br>
-                        <div class="col-auto p-0 me-3">
-                            <form action="del_item" method="post" class="form-del-item bg-transparent border-0"
-                                data-id="<%= agendamento.id %>">
-                                <input type="hidden" name="dataAgendamento" value="<%= agendamento.dataAgendamento %>">
-                                <a href="/agendamento/editar/<%= agendamento.id %>"
-                                    class="text-white text-decoration-none edit-item" data-bs-toggle="tooltip"
-                                    data-bs-title="Editar" data-bs-placement="bottom">
-                                    <i class="bi bi-pencil me-2"></i>
-                                </a>
-                                <input type="hidden" name="idAgendamento" value="<%= agendamento.id %>">
-                                <button type="button" class="btn bg-transparent p-0 btn-open-modal"
-                                    data-bs-toggle="modal" data-bs-target="#modalDelItem"
+                            <br><br>
+                            <div class="col-auto p-0 me-3">
+                                <form action="del_item" method="post" class="form-del-item bg-transparent border-0"
                                     data-id="<%= agendamento.id %>">
-                                    <i class="bi bi-trash3 text-white del-item" data-bs-toggle="tooltip"
-                                        data-bs-title="Excluir" data-bs-placement="bottom"></i>
-                                </button>
-                            </form>
-                        </div>
-                </div>
-                <% }) %>
-                    <div class="modal fade" id="modalDelItem" tabindex="-1" aria-labelledby="modalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog border-0">
-                            <div class="modal-content bg-dark">
-                                <div class="modal-header d-flex flex-column align-items-start border-0">
-                                    <p class="text-white fs-4 mb-0" id="modalLabel">
-                                        <i class="bi bi-exclamation-circle fs-4 text-danger fw-semibold"></i>
-                                        Tem certeza?
-                                    </p>
-                                    <p class="text-danger mb-0">Essa ação não poderá ser desfeita</p>
-                                </div>
-                                <div class="modal-body border-0">
-                                    <label for="inputDelItem" class="text-white fw-semibold mb-3">
-                                        > Digite ' deletar' para confirmar a exclusão </label>
-                                    <input type="text" class="input-del-item" id="inputDelItem" placeholder="deletar">
-                                </div>
-                                <div class="modal-footer border-0 d-flex justify-content-start">
-                                    <button type="button" class="btn btn-outline-danger btn-confirm-del">Confirmar
-                                        exclusão</button>
-                                </div>
+                                    <input type="hidden" name="dataAgendamento"
+                                        value="<%= agendamento.dataAgendamento %>">
+                                    <a href="/agendamento/editar/<%= agendamento.id %>"
+                                        class="text-white text-decoration-none edit-item" data-bs-toggle="tooltip"
+                                        data-bs-title="Editar" data-bs-placement="bottom">
+                                        <i class="bi bi-pencil me-2"></i>
+                                    </a>
+                                    <input type="hidden" name="idAgendamento" value="<%= agendamento.id %>">
+                                    <button type="button" class="btn bg-transparent p-0 btn-open-modal"
+                                        data-bs-toggle="modal" data-bs-target="#modalDelItem"
+                                        data-id="<%= agendamento.id %>">
+                                        <i class="bi bi-trash3 text-white del-item" data-bs-toggle="tooltip"
+                                            data-bs-title="Excluir" data-bs-placement="bottom"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
-                    </div>
+                        <% }) %>
+                            <div class="modal fade" id="modalDelItem" tabindex="-1" aria-labelledby="modalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog border-0">
+                                    <div class="modal-content bg-dark">
+                                        <div class="modal-header d-flex flex-column align-items-start border-0">
+                                            <p class="text-white fs-4 mb-0" id="modalLabel">
+                                                <i class="bi bi-exclamation-circle fs-4 text-danger fw-semibold"></i>
+                                                Tem certeza?
+                                            </p>
+                                            <p class="text-danger mb-0">Essa ação não poderá ser desfeita</p>
+                                        </div>
+                                        <div class="modal-body border-0">
+                                            <label for="inputDelItem" class="text-white fw-semibold mb-3">
+                                                > Digite ' deletar' para confirmar a exclusão </label>
+                                            <input type="text" class="input-del-item" id="inputDelItem" placeholder="deletar">
+                                        </div>
+                                        <div class="modal-footer border-0 d-flex justify-content-start">
+                                            <button type="button" class="btn btn-outline-danger btn-confirm-del">Confirmar
+                                                exclusão</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
             </div>
             <div class="row d-flex flex-row justify-content-around align-items-center text-center row-links w-100 me-5">
                 <div class="col-3">
