@@ -22,7 +22,6 @@ module.exports = {
             let dataFiltrada = req.query.dataFiltrada;
             let dataConsulta = dataFiltrada || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-
             console.log(dataConsulta)
             // > Busca os agendamentos do dia
             const agendamentos = await Agendamento.findAll({
@@ -69,25 +68,25 @@ module.exports = {
         }
     },
 
-    // > Relatório de Atendimentos por data filtrada ou data atual
+    // > Relatório de Atendimentos por data filtrada ou data atual, filtrando apenas clientes com qualificacao = "Q"
     relatorio_atendimentos: async (req, res) => {
         try {
             let dataFiltrada = req.query.dataFiltrada;
             // Se não houver data filtrada, usa a data atual (YYYY-MM-DD)
             let dataConsulta = dataFiltrada || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-            // > Busca os atendimentos diretamente pela string da data, já que é DATEONLY
+            // > Busca os atendimentos diretamente pela string da data, já que é DATEONLY, e filtra por qualificacao = "Q"
             const atendimentos = await Atendimento.findAll({
-                raw: true, // Garante que os dados vêm como objetos JavaScript planos
+                raw: true,
                 where: {
-                    dataAtendimento: dataConsulta // Compara diretamente a string 'YYYY-MM-DD'
+                    dataAtendimento: dataConsulta,
+                    qualificacao: "Q" // Filtra apenas atendimentos com qualificacao = "Q"
                 },
                 order: [['updatedAt', 'ASC']]
             });
 
             // Log para depuração: Verifique o que vem do banco
             console.log('Atendimentos encontrados para', dataConsulta, ':', atendimentos.length);
-            // console.log(atendimentos); // Descomente para ver os dados brutos
 
             // > Cria planilha Excel
             const workbook = new ExcelJS.Workbook();
@@ -134,13 +133,12 @@ module.exports = {
             // > Adiciona linhas ao Excel com apenas textos em MAIÚSCULO
             atendimentos.forEach(atendimento => {
                 worksheet.addRow({
-                    // dataAtendimento já é uma string 'YYYY-MM-DD' por causa de raw: true e DATEONLY
                     dataFormatada: formatarDataBR(atendimento.dataAtendimento || ''),
                     produto: atendimento.produto?.toUpperCase() || '',
                     numeroContrato: atendimento.numeroContrato || '',
                     nomeCliente: atendimento.nomeCliente?.toUpperCase() || '',
                     cpfCompra: atendimento.cpfCompra || '',
-                    dataNasc1: formatarDataBR(atendimento.dataNasc1 || ''), // dataNasc1 também é DATEONLY
+                    dataNasc1: formatarDataBR(atendimento.dataNasc1 || ''),
                     idadeCliente: atendimento.idadeCliente,
                     generoCliente: atendimento.generoCliente?.toUpperCase() || '',
                     tel1: atendimento.tel1,
@@ -150,7 +148,6 @@ module.exports = {
                     cidade: atendimento.cidade?.toUpperCase() || '',
                     qtdFilhos: atendimento.qtdFilhos,
                     conjuge: atendimento.conjuge?.toUpperCase() || '',
-                    // dataNasc2 pode ser null, então verifica antes de formatar
                     dataNasc2: atendimento.dataNasc2 ? formatarDataBR(atendimento.dataNasc2) : '',
                     idadeAcompanhante: atendimento.idadeAcompanhante,
                     generoAcompanhante: atendimento.generoAcompanhante?.toUpperCase() || '',
@@ -158,7 +155,7 @@ module.exports = {
                     qualificacao: atendimento.qualificacao?.toUpperCase() || '',
                     base: atendimento.base?.toUpperCase() || '',
                     jaVisitou: atendimento.jaVisitou?.toUpperCase() || '',
-                    qtdVisitas: atendimento.qtdVisitas ? atendimento.qtdVisitas.slice(0, 1) : '', // Verificação para qtdVisitas
+                    qtdVisitas: atendimento.qtdVisitas ? atendimento.qtdVisitas : '',
                     cartao: atendimento.cartao?.toUpperCase() || '',
                     canalProspeccao: atendimento.canalProspeccao?.toUpperCase() || '',
                     brinde: atendimento.brinde?.toUpperCase() || '',
@@ -166,7 +163,7 @@ module.exports = {
                     NC: atendimento.NC?.toUpperCase() || '',
                     consultor: atendimento.consultor?.toUpperCase() || '',
                     promotor: atendimento.promotor?.toUpperCase() || '',
-                    consultorGuarany: atendimento.consultorGuarany?.toUpperCase() || '',
+                    consultorGuarany: atendimento.consultorGuarany?.toUpperCase(),
                     captadorGuarany: atendimento.captadorGuarany?.toUpperCase() || '',
                     toGuarany: atendimento.toGuarany?.toUpperCase() || '',
                     observacao: atendimento.observacao?.toUpperCase() || ''
@@ -202,9 +199,7 @@ module.exports = {
 
         } catch (error) {
             console.error('❌ Erro ao gerar relatório de atendimentos:', error);
-            // Retorne uma resposta mais clara em caso de erro
             res.status(500).json({ success: false, message: 'Erro interno do servidor ao gerar o relatório de atendimentos.', error: error.message });
         }
     }
-
 }
