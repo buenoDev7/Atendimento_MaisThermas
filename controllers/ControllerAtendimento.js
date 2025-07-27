@@ -235,6 +235,7 @@ module.exports = {
             qualificacao: req.body.qualificacao,
             jaVisitou: req.body.jaVisitou,
             motivoDesqualificacao: req.body.motivoDesqualificacao,
+            brindeCompra: req.body.brindeCompra,
             NC: req.body.NC,
             consultor: req.body.consultor,
             consultorGuarany: req.body.consultorGuarany,
