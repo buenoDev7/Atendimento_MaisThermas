@@ -51,7 +51,7 @@
                             </li>
                             <hr class="text-white">
                             <li>
-                                <form action="filtrar_data_agendamentos" method="get"
+                                <form action="agendamentos" method="get"
                                     class="form-control bg-transparent border-0">
                                     <div class="row">
                                         <div class="col-12 d-flex align-items-center">
@@ -75,7 +75,7 @@
                 </div>
                 <div class="col-10 text-center d-flex flex-row justify-content-around mt-2">
                     <% promotores.forEach(promotor=> { %>
-                        <div class="col-3">
+                        <div class="col-auto">
                             <span class="fs-6 ff-sora text-white">
                                 <%= promotor.promotor.split(' ')[0] %>:
                             </span>
@@ -106,13 +106,14 @@
                                     style="width: 12px; height: 12px; cursor: pointer;" data-bs-toggle="tooltip"
                                         data-bs-title="<%= agendamento.promotor %>" data-bs-placement="bottom">
                                 </span>
-                                <span class="ms-2 <%= agendamento.statusFinalizacao === 'Finalizado' ? 'text-success' : 'text-warning' %>"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-title="<%= agendamento.statusFinalizacao %>"
-                                    data-bs-placement="right">
-                                    <i class="bi <%= agendamento.statusFinalizacao === 'Finalizado' ? 'bi-check-circle-fill' : 'bi-exclamation-circle-fill' %>"></i>
-                                </span>
-
+                                <% if (agendamento.classeTexto === 'texto-atendido') { %>
+                                    <span class="ms-2 <%= agendamento.statusFinalizacao === 'Finalizado' ? 'text-success' : 'text-warning' %>"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-title="<%= agendamento.statusFinalizacao %>"
+                                        data-bs-placement="right">
+                                        <i class="bi <%= agendamento.statusFinalizacao === 'Finalizado' ? 'bi-check-circle-fill' : 'bi-exclamation-circle-fill' %>"></i>
+                                    </span>
+                                <% } %>
                                 <div class="dropdown">
                                     <ul class="dropdown-menu" data-bs-theme="dark">
                                         <li>
@@ -175,9 +176,9 @@
                                 </div>
                             </div>
             </div>
-            <div class="row d-flex flex-row justify-content-around align-items-center text-center row-links w-100 me-5">
+            <div class="row d-flex flex-row justify-content-around align-items-center text-center row-links w-100 ms-5">
                 <div class="col-3">
-                    <a href="/" class="nav-link text-white fs-6 link-cadastro ff-sora fw-light">
+                    <a href="/cadastro" class="nav-link text-white fs-6 link-cadastro ff-sora fw-light">
                         <i class="bi bi-plus fs-6"></i>Agendar
                     </a>
                 </div>
