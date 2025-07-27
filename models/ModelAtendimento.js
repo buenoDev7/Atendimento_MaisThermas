@@ -279,6 +279,11 @@ const Atendimento = connection.define('atendimento', {
         allowNull: true
     },
 
+    brindeCompra: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+
     NC: {
         type: Sequelize.STRING,
         allowNull: true
