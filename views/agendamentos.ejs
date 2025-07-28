@@ -116,17 +116,27 @@
                                 <% } %>
                                 <div class="dropdown">
                                     <ul class="dropdown-menu" data-bs-theme="dark">
-                                        <li>
-                                            <a class="dropdown-item" href="/atendimento/<%= agendamento.id %>">
-                                                <i class="bi bi-file-earmark-arrow-up text-white fs-6 me-1"></i>
-                                                Preencher Ficha
-                                            </a>
-                                        </li>
+                                        <% if (agendamento.classeTexto==='texto-atendido' ) { %>
                                         <li>
                                             <a class="dropdown-item" href="/ficha/<%= agendamento.id %>">
-                                                <i class="bi bi-search text-white fs-6 me-1"></i> Visualizar Ficha
+                                                <i class="bi bi-search text-white fs-6 me-1"></i> Visualizar
+                                                Ficha
                                             </a>
                                         </li>
+                                            <li>
+                                                <a class="dropdown-item" href="/finalizar_atendimento/<%= agendamento.id %>">
+                                                    <i class="bi bi-clipboard-check text-white fs-6 me-1"></i> Finalizar
+                                                    Atendimento
+                                                </a>
+                                            </li>
+                                        <% } else { %>
+                                            <li>
+                                                <a class="dropdown-item" href="/atendimento/<%= agendamento.id %>">
+                                                    <i class="bi bi-file-earmark-arrow-up text-white fs-6 me-1"></i>
+                                                    Preencher Ficha
+                                                </a>
+                                            </li>
+                                        <% } %>
                                     </ul>
                                 </div>
                             </div>
