@@ -509,6 +509,14 @@
                                                 <i class="bi bi-clipboard-check pe-1 fs-3 text-dark"></i>
                                             </a>
                                         </div>
+                                        <!-- Excluir ficha -->
+                                        <div class="col-3 w-auto text-start pt-1">
+                                            <form action="/del_ficha" method="post">
+                                                <input type="hidden" name="idAtendimento" id="idAtendimento" value="<%= ficha.id %>">
+                                                <button type="submit" class="bi bi-trash3 btn fs-3 p-0 m-0" data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom" data-bs-title="Excluir"></button>
+                                            </form>
+                                        </div>
                                         <!-- Voltar -->
                                         <div class="col-3 w-auto text-start">
                                             <a href="/agendamentos" class="p-0 btn mt-1" data-bs-toggle="tooltip"

@@ -15,7 +15,7 @@ router.get('/ficha/:id', ControllerAtendimento.exibirFicha);
 router.get('/atendimentos', ControllerAtendimento.listarAtendimentos);
 
 // > Excluir atendimento
-router.post('/del_atendimento', ControllerAtendimento.excluir_atendimento);
+router.post('/del_ficha', ControllerAtendimento.excluir_atendimento);
 
 // > View para editar informações do atendimento
 router.get('/atendimento/editar/:idAtendimento', ControllerAtendimento.editar_atendimento);
