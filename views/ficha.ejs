@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-1 w-auto text-start link-top">
                         <h1 class="text-center pt-5 title-top">
-                            Ficha - <%= ficha.nomeCliente %> e <%= ficha.conjuge %>
+                            Ficha - <%= ficha.nomeCliente %> <%= ficha.conjuge && ficha.conjuge.trim() ? 'e ' + ficha.conjuge : '' %>
                         </h1>
                         <a href="/agendamentos" class="btn mt-1 ms-3" data-bs-toggle="tooltip" data-bs-placement="right"
                             data-bs-title="Voltar">
