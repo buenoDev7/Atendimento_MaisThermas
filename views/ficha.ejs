@@ -32,7 +32,29 @@
             <% let dataNasc2Formatada=new Date(ficha.dataNasc2).toLocaleDateString('pt-BR', { timeZone: 'UTC' }); %>
                 <% let dataCompraFormatada=new Date(ficha.dataCompra).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                     %>
-
+                    <div class="modal fade" id="modalDelItem" tabindex="-1" aria-labelledby="modalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog border-0">
+                            <div class="modal-content bg-dark">
+                                <div class="modal-header d-flex flex-column align-items-start border-0">
+                                    <p class="text-white fs-4 mb-0" id="modalLabel">
+                                        <i class="bi bi-exclamation-circle fs-4 text-danger fw-semibold"></i>
+                                        Tem certeza?
+                                    </p>
+                                    <p class="text-danger mb-0">Essa ação não poderá ser desfeita</p>
+                                </div>
+                                <div class="modal-body border-0">
+                                    <label for="inputDelItem" class="text-white fw-semibold mb-3">
+                                        > Digite ' deletar' para confirmar a exclusão </label>
+                                    <input type="text" class="input-del-item" id="inputDelItem" placeholder="deletar">
+                                </div>
+                                <div class="modal-footer border-0 d-flex justify-content-start">
+                                    <button type="button" class="btn btn-outline-danger btn-confirm-del">Confirmar
+                                        exclusão</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-1 w-auto text-start link-top">
                         <h1 class="text-center pt-5 title-top">
                             Ficha - <%= ficha.nomeCliente %> e <%= ficha.conjuge %>
@@ -346,7 +368,8 @@
                                             <label class="form-label fs-7 me-2 fw-semibold">Possui cartão de crédito?
                                                 <span class="text-danger">*</span></label>
                                             <span>
-                                                <% if (ficha.cartao==='SIM' || ficha.cartao==='Sim' || ficha.cartao==='sim' || ficha.cartao==="" ) { %>
+                                                <% if (ficha.cartao==='SIM' || ficha.cartao==='Sim' ||
+                                                    ficha.cartao==='sim' || ficha.cartao==="" ) { %>
                                                     Sim
                                                     <% } else { %>
                                                         Não
@@ -468,8 +491,10 @@
                                             Observações:
                                         </label>
                                         <div class="col-12 fw-semibold">
-                                            <input type="text" class="form-control form-control-sm border-0 bg-transparent"
-                                                id="inputObservacoes" autocomplete="off" value="<%= ficha.observacoes %>" disabled>
+                                            <input type="text"
+                                                class="form-control form-control-sm border-0 bg-transparent"
+                                                id="inputObservacoes" autocomplete="off"
+                                                value="<%= ficha.observacoes %>" disabled>
                                         </div>
                                     </div>
                                     <!-- Fim da Linha 20 -->
@@ -504,17 +529,23 @@
                                         </div>
                                         <!-- Finalizar atendimento -->
                                         <div class="col-3 w-auto text-start">
-                                            <a href="/finalizar_atendimento/<%= ficha.id %>" class="p-0 btn mt-1" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" data-bs-title="Finalizar Atendimento">
+                                            <a href="/finalizar_atendimento/<%= ficha.id %>" class="p-0 btn mt-1"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                data-bs-title="Finalizar Atendimento">
                                                 <i class="bi bi-clipboard-check pe-1 fs-3 text-dark"></i>
                                             </a>
                                         </div>
                                         <!-- Excluir ficha -->
                                         <div class="col-3 w-auto text-start pt-1">
-                                            <form action="/del_ficha" method="post">
-                                                <input type="hidden" name="idAtendimento" id="idAtendimento" value="<%= ficha.id %>">
-                                                <button type="submit" class="bi bi-trash3 btn fs-3 p-0 m-0" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" data-bs-title="Excluir"></button>
+                                            <form action="/del_ficha" method="post" class="form-del-item"
+                                                data-id="<%= ficha.id %>">
+                                                <input type="hidden" name="idAtendimento" id="idAtendimento"
+                                                    value="<%= ficha.id %>">
+                                                <button type="button"
+                                                    class="bi bi-trash3 btn fs-3 p-0 m-0 btn-open-modal"
+                                                    data-bs-toggle="modal" data-bs-target="#modalDelItem"
+                                                    data-id="<%= ficha.id %>">
+                                                </button>
                                             </form>
                                         </div>
                                         <!-- Voltar -->
@@ -529,19 +560,46 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                         <!-- Verso da Folha -->
                         <div class="print-page">
                             <div class="container container-verso w-auto mt-5 bg-white">
                                 <div class="row mx-2 mt-5 d-block text-white"></div>
                             </div>
                         </div>
-
-
                     </div>
                     <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            let formDelItem = null;
+
+                            // Captura o clique no botão de exclusão para abrir o modal
+                            document.querySelectorAll('.btn-open-modal').forEach(btn => {
+                                btn.addEventListener('click', () => {
+                                    window.scrollTo(0, 0); // Rola para o topo (opcional)
+                                    const id = btn.getAttribute('data-id'); // Obtém o data-id do botão
+                                    formDelItem = document.querySelector(`.form-del-item[data-id="${id}"]`); // Associa o formulário correto
+                                    document.getElementById('inputDelItem').value = ''; // Limpa o campo de confirmação
+                                });
+                            });
+
+                            // Botão de confirmação no modal
+                            document.querySelector('.btn-confirm-del').addEventListener('click', () => {
+                                const inputDelItem = document.getElementById('inputDelItem').value.trim().toLowerCase();
+                                if (inputDelItem === 'deletar') {
+                                    if (formDelItem) {
+                                        formDelItem.submit(); // Envia o formulário associado
+                                    } else {
+                                        alert('Erro: formulário não encontrado.');
+                                    }
+                                } else {
+                                    alert('Digite "deletar" para confirmar a exclusão.');
+                                }
+                            });
+
+                            // Ativa os tooltips
+                            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+                        });
+
                         // → Tooltips de dicas dos botões de Imprimir, Salvar e Sair
                         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
                         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
