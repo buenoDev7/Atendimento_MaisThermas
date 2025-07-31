@@ -74,9 +74,9 @@
                     <i class="bi bi-file-earmark-bar-graph fs-4"></i> Relatório
                 </a>
             </div>
-            <div class="col-10 text-center d-flex flex-row justify-content-around mt-2">
+            <div class="row text-center d-flex flex-row justify-content-around mt-2">
                 <% promotores.forEach(promotor=> { %>
-                    <div class="col-auto">
+                    <div class="col-4 col-md-auto">
                         <span class="fs-6 ff-sora text-white">
                             <%= promotor.promotor.split(' ')[0] %>:
                         </span>
@@ -92,7 +92,7 @@
             <% let i=1; %>
             <% agendamentos.forEach(agendamento=> { %>
                 <div class="row d-flex flex-row justify-content-between align-items-center flex-nowrap">
-                    <div class="col-11 d-flex flex-row flex-nowrap align-items-center">
+                    <div class="col-10 col-md-11 d-flex flex-row flex-nowrap align-items-center">
                         <span class="link-atendimento nome-agendamento text-white fw-light ff-sora dropdown-toggle <%= agendamento.classeTexto %>"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <%= i++ %> - 
@@ -192,7 +192,7 @@
         </div>
         <div class="row d-flex flex-row justify-content-around align-items-center text-center row-links w-100 ms-5">
             <div class="col-3">
-                <a href="/" class="nav-link text-white fs-6 link-cadastro ff-sora fw-light">
+                <a href="/cadastro" class="nav-link text-white fs-6 link-cadastro ff-sora fw-light">
                     <i class="bi bi-plus fs-6"></i>Agendar
                 </a>
             </div>
