@@ -100,7 +100,6 @@ module.exports = {
         });
     },
 
-    // > Busca e filtra atendimentos por data e status de finalização
     listarAtendimentos: async (req, res) => {
         const coresPorPromotor = {
             'PAULO CESAR': 'cor-paulo',
@@ -117,11 +116,15 @@ module.exports = {
             'yan bueno': 'cor-yan'
         };
 
-        const dataFiltrada = req.query.dataFiltrada || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
-        const dataFiltradaFormatada = new Date(dataFiltrada).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+        const dataInicioFiltro = req.query.dataInicio || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
+        const dataFimFiltro = req.query.dataFim || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-        const dataInicio = new Date(dataFiltrada + 'T00:00:00.000Z');
-        const dataFim = new Date(dataFiltrada + 'T23:59:59.999Z');
+        const dataInicio = new Date(dataInicioFiltro + 'T00:00:00.000Z');
+        const dataFim = new Date(dataFimFiltro + 'T23:59:59.999Z');
+
+        const dataFiltradaFormatadaInicio = new Date(dataInicioFiltro).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+        const dataFiltradaFormatadaFim = new Date(dataFimFiltro).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+
 
         try {
             // > Contagem de atendimentos finalizados por promotor
@@ -158,8 +161,10 @@ module.exports = {
             res.render('lista_atendimentos', {
                 atendimentos: atendimentosComCor,
                 promotores,
-                dataFiltrada,
-                dataFiltradaFormatada
+                dataInicioFiltro,
+                dataFimFiltro,
+                dataFiltradaFormatadaInicio,
+                dataFiltradaFormatadaFim
             });
         } catch (error) {
             console.error("Erro ao buscar atendimentos:", error);

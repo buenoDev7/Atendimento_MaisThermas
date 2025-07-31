@@ -5,23 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Atendimentos</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- CSS -->
     <link rel="stylesheet" href="/css/lista_atendimentos.css">
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chau+Philomene+One:ital@0;1&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
-    <!-- Favicon -->
     <link rel="shortcut icon" href="/img/favicon-list.png" type="image/x-icon">
-    <!-- Script.js -->
-     <script src="/js/lista_atendimentos.js"></script>
+    <script src="/js/lista_atendimentos.js"></script>
 </head>
 
 <body>
@@ -32,20 +25,21 @@
                     class="col-10 w-auto d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start mt-3 text-center text-md-start">
                     <img src="/img/maisThermas.png" class="maisThermas-header me-3">
                     <h2 class="ff-philomene yellow mt-3">
-                        <%= atendimentos.length %> <%= atendimentos.length===1 ? ' ATENDIMENTO' : ' ATENDIMENTOS' %> - <%= dataFiltradaFormatada%>
+                        <%= atendimentos.length %>
+                        <%= atendimentos.length===1 ? ' ATENDIMENTO' : ' ATENDIMENTOS' %> -
+                        <%= dataFiltradaFormatadaInicio %>
+                        <%= dataFiltradaFormatadaInicio !== dataFiltradaFormatadaFim ? ' a ' + dataFiltradaFormatadaFim : '' %>
                     </h2>
 
-                    <!-- Filtrar data de agendamentos -->
                     <button class="btn bg-transparent border-0 p-0 dropdown-toggle" data-bs-toggle="dropdown">
                         <i class="bi bi-funnel text-white ms-3 fs-3 yellow" data-bs-toggle="tooltip"
                             title="Filtrar data" data-bs-placement="right"></i>
                     </button>
-                    <!-- Dropdown de form pra filtrar a data -->
                     <div class="dropdown col-auto">
                         <ul class="dropdown-menu" data-bs-theme="dark">
                             <li class="text-center pt-2">
                                 <span class="fw-semibold text-white fs-6">
-                                    <i class="bi bi-calendar text-white fs-6 me-1"></i> Selecione a data:
+                                    <i class="bi bi-calendar text-white fs-6 me-1"></i> Selecione o intervalo:
                                 </span>
                             </li>
                             <hr class="text-white">
@@ -53,10 +47,17 @@
                                 <form action="/atendimentos" method="get"
                                     class="form-control bg-transparent border-0">
                                     <div class="row">
-                                        <div class="col-12 d-flex align-items-center">
-                                            <input type="date" name="dataFiltrada"
+                                        <div class="col-12 d-flex flex-column align-items-center">
+                                            <label for="dataInicio" class="text-white">Data Inicial:</label>
+                                            <input type="date" name="dataInicio" id="dataInicio"
                                                 class="form-control input-filtrar-data" required min="1900-01-01"
-                                                max="2099-12-31">
+                                                max="2099-12-31" value="<%= dataInicioFiltro %>">
+                                        </div>
+                                        <div class="col-12 d-flex flex-column align-items-center mt-2">
+                                            <label for="dataFim" class="text-white">Data Final:</label>
+                                            <input type="date" name="dataFim" id="dataFim"
+                                                class="form-control input-filtrar-data" required min="1900-01-01"
+                                                max="2099-12-31" value="<%= dataFimFiltro %>">
                                         </div>
                                         <div class="col-12">
                                             <button type="submit"
@@ -67,8 +68,7 @@
                             </li>
                         </ul>
                     </div>
-                    <!-- Link para relatórios -->
-                    <a href="/relatorio_atendimentos?<%= dataFiltrada ? `dataFiltrada=${dataFiltrada}` : '' %>" class="nav-link text-white fs-6 link-relatorios ff-sora fw-light">
+                    <a href="/relatorio_atendimentos?dataInicio=<%= dataInicioFiltro %>&dataFim=<%= dataFimFiltro %>" class="nav-link text-white fs-6 link-relatorios ff-sora fw-light">
                         <i class="bi bi-file-earmark-bar-graph fs-4"></i> Relatório
                     </a>
                 </div>
@@ -92,18 +92,19 @@
                     <% atendimentos.forEach(atendimento=> { %>
                         <div class="row d-flex flex-row justify-content-between align-items-center flex-nowrap">
                             <div class="col-10">
-                                <span class="link-atendimento nome-atendimento text-white fw-light ff-sora dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="link-atendimento nome-atendimento text-white fw-light ff-sora dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     <span class="me-2 light-green fs-5"> ✔ </span>
 
                                     <%= i++ %> - <%= atendimento.nomeCliente %>
-                                    
-                                    <% if (atendimento.conjuge && atendimento.conjuge.trim() !== '') { %>
-                                        & <%= atendimento.conjuge %>
-                                    <% } %>
+
+                                        <% if (atendimento.conjuge && atendimento.conjuge.trim() !=='') { %>
+                                            & <%= atendimento.conjuge %>
+                                        <% } %>
                                 </span>
-                                 <span class="d-inline-block rounded-circle ms-1 mb-2 <%= atendimento.classeCor %>"
+                                <span class="d-inline-block rounded-circle ms-1 mb-2 <%= atendimento.classeCor %>"
                                     style="width: 12px; height: 12px; cursor: pointer;" data-bs-toggle="tooltip"
-                                        data-bs-title="<%= atendimento.promotor %>" data-bs-placement="bottom">
+                                    data-bs-title="<%= atendimento.promotor %>" data-bs-placement="bottom">
                                 </span>
                                 <div class="dropdown">
                                     <ul class="dropdown-menu" data-bs-theme="dark">
@@ -117,17 +118,19 @@
                             </div>
                             <br><br>
                             <div class="col-auto p-0 me-3">
-                                <!-- Deletar atendimento -->
-                                <form action="/del_ficha" method="post" class="form-del-item bg-transparent border-0" data-id="<%= atendimento.id %>">
+                                <form action="/del_ficha" method="post" class="form-del-item bg-transparent border-0"
+                                    data-id="<%= atendimento.id %>">
                                     <a href="/atendimento/editar/<%= atendimento.id %>"
                                         class="text-white text-decoration-none edit-item">
-                                        <i class="bi bi-pencil me-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar"></i>
+                                        <i class="bi bi-pencil me-2" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                            title="Editar"></i>
                                     </a>
                                     <input type="hidden" name="idAtendimento" value="<%= atendimento.id %>">
                                     <button type="button" class="btn bg-transparent p-0 btn-open-modal"
                                         data-bs-toggle="modal" data-bs-target="#modalDelItem"
                                         data-id="<%= atendimento.id %>">
-                                        <i class="bi bi-trash3 text-white del-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Excluir"></i>
+                                        <i class="bi bi-trash3 text-white del-item" data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom" title="Excluir"></i>
                                     </button>
                                     <span class="text-white ms-1 pb-5 ff-sora">
                                         - &NonBreakingSpace; <%= i - 1 %>
@@ -182,3 +185,5 @@
             </div>
         </div>
 </body>
+
+</html>

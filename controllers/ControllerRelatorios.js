@@ -88,23 +88,29 @@ module.exports = {
 
     // > Relatório de Atendimentos por data filtrada ou data atual, filtrando apenas clientes com qualificacao = "Q"
     relatorio_atendimentos: async (req, res) => {
+        const { Op } = require('sequelize')
         try {
-            let dataFiltrada = req.query.dataFiltrada;
-            // Se não houver data filtrada, usa a data atual (YYYY-MM-DD)
-            let dataConsulta = dataFiltrada || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
+            // > Obtém as datas de início e fim do filtro da requisição
+            // > Se não houver data de início, usa a data atual (UTC-3)
+            const dataInicioFiltro = req.query.dataInicio || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-            // > Busca os atendimentos diretamente pela string da data, já que é DATEONLY, e filtra por qualificacao = "Q"
+            // > Se não houver data de fim, usa a data de início do filtro como data final
+            const dataFimFiltro = req.query.dataFim || dataInicioFiltro;
+
+            // > Busca os atendimentos dentro do intervalo de datas e filtra por qualificacao = "Q"
             const atendimentos = await Atendimento.findAll({
                 raw: true,
                 where: {
-                    dataAtendimento: dataConsulta,
-                    qualificacao: "Q" // Filtra apenas atendimentos com qualificacao = "Q"
+                    dataAtendimento: {
+                        [Op.between]: [dataInicioFiltro, dataFimFiltro]
+                    },
+                    qualificacao: "Q" // > Filtra apenas atendimentos com qualificacao = "Q"
                 },
                 order: [['updatedAt', 'ASC']]
             });
 
-            // Log para depuração: Verifique o que vem do banco
-            console.log('Atendimentos encontrados para', dataConsulta, ':', atendimentos.length);
+            // Log para depuração: Contagem de registros encontrados
+            console.log(`\n\nAtendimentos encontrados para o período de ${dataInicioFiltro} a ${dataFimFiltro}: ${atendimentos.length}`);
 
             // > Cria planilha Excel
             const workbook = new ExcelJS.Workbook();
@@ -202,14 +208,21 @@ module.exports = {
                 }
             });
 
-            // Nome do arquivo com data formatada
-            const [ano, mes, dia] = dataConsulta.split('-');
-            const nomeDataArquivo = `${dia}-${mes}-${ano}`;
-            const nomeArquivo = `Atendimentos_${nomeDataArquivo}.xlsx`;
+            // > Define o nome do arquivo com base no intervalo de datas
+            let nomeDataArquivo;
+            const [diaInicio, mesInicio, anoInicio] = dataInicioFiltro.split('-').reverse(); // Formato YYYY-MM-DD para DD-MM-YYYY
+            const [diaFim, mesFim, anoFim] = dataFimFiltro.split('-').reverse();
+
+            if (dataInicioFiltro === dataFimFiltro) {
+                nomeDataArquivo = `${diaInicio}-${mesInicio}-${anoInicio}`;
+            } else {
+                nomeDataArquivo = `${diaInicio}-${mesInicio}-${anoInicio}_a_${diaFim}-${mesFim}-${anoFim}`;
+            }
+            const nomeArquivo = `Atendimentos_Qualificados_${nomeDataArquivo}.xlsx`;
 
             // Headers para download
             res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            res.setHeader('Content-Disposition', `attachment; filename=${nomeArquivo}`);
+            res.setHeader('Content-Disposition', `attachment; filename="${nomeArquivo}"`);
 
             // Envia o arquivo para o browser
             await workbook.xlsx.write(res);
