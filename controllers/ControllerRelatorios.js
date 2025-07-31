@@ -15,18 +15,27 @@ function formatarDataBR(dataISO) {
 }
 
 module.exports = {
-    // > Relatório de Agendamentos por data filtrada ou data atual
+    // > Relatório de Agendamentos por intervalo de datas
     relatorio_agendamentos: async (req, res) => {
         try {
-            // > Data filtrada ou atual
-            let dataFiltrada = req.query.dataFiltrada;
-            let dataConsulta = dataFiltrada || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
+            // > Define data de início e fim
+            let { dataInicio, dataFim } = req.query;
 
-            console.log(dataConsulta)
-            // > Busca os agendamentos do dia
+            // > Usa data atual se não fornecida
+            if (!dataInicio || !dataFim) {
+                const today = new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
+                dataInicio = today;
+                dataFim = today;
+            }
+
+            // > Busca agendamentos no período
             const agendamentos = await Agendamento.findAll({
                 raw: true,
-                where: { dataAgendamento: dataConsulta },
+                where: {
+                    dataAgendamento: {
+                        [Sequelize.Op.between]: [dataInicio, dataFim]
+                    }
+                },
                 order: [['horarioAgendamento', 'ASC']]
             });
 
@@ -34,39 +43,48 @@ module.exports = {
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet('Agendamentos');
 
-            // > Cabeçalhos
+            // > Cabeçalhos da planilha
             worksheet.columns = [
                 { header: 'Data', key: 'dataAgendamento', width: 12 },
                 { header: 'Nomes', key: 'nomesAgendamento', width: 30 },
-                { header: 'Promotor', key: 'promotor', width: 12 },
+                { header: 'Promotor', key: 'promotor', width: 15 },
+                { header: 'Horário', key: 'horarioAgendamento', width: 10 }
             ];
 
-            // > Adiciona linhas com data formatada em DD/MM/YYYY
+            // > Adiciona linhas à planilha
             agendamentos.forEach(item => {
                 worksheet.addRow({
                     dataAgendamento: formatarDataBR(item.dataAgendamento),
                     nomesAgendamento: item.nomesAgendamento,
-                    promotor: item.promotor
+                    promotor: item.promotor,
+                    horarioAgendamento: item.horarioAgendamento ? item.horarioAgendamento.slice(0, 5) : ''
                 });
             });
 
-            // > Nome do arquivo com data formatada (underscores para ficar clean)
-            const nomeDataArquivo = formatarDataBR(dataConsulta).replace(/\//g, '-'); // ex: 19-07-2025
+            // > Define nome do arquivo
+            let nomeDataArquivo;
+            if (dataInicio === dataFim) {
+                nomeDataArquivo = formatarDataBR(dataInicio).replace(/\//g, '-');
+            } else {
+                nomeDataArquivo = `${formatarDataBR(dataInicio).replace(/\//g, '-')}_a_${formatarDataBR(dataFim).replace(/\//g, '-')}`;
+            }
             const nomeArquivo = `Agendamentos_${nomeDataArquivo}.xlsx`;
 
-            // > Headers para download
+            // > Configura headers para download
             res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             res.setHeader('Content-Disposition', `attachment; filename=${nomeArquivo}`);
 
-            // > Envia o arquivo para o browser
+            // > Envia o arquivo
             await workbook.xlsx.write(res);
             res.end();
 
         } catch (error) {
+            // > Loga erro e envia resposta de erro
             console.error('❌ Erro ao gerar relatório:', error);
             res.status(500).send('Erro ao gerar relatório');
         }
     },
+
 
     // > Relatório de Atendimentos por data filtrada ou data atual, filtrando apenas clientes com qualificacao = "Q"
     relatorio_atendimentos: async (req, res) => {

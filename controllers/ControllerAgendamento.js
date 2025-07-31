@@ -50,10 +50,27 @@ module.exports = {
         };
 
         // > Formatação de datas para formato DD/MM/AAAA
-        let dataFiltrada = req.query.dataFiltrada;
-        let dataConsulta = dataFiltrada || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
-        let [ano, mes, dia] = dataConsulta.split('-');
-        let dataFiltradaFormatada = `${dia}/${mes}/${ano}`;
+        let { dataInicio, dataFim } = req.query;
+
+        // Se dataInicio ou dataFim não forem fornecidas, use a data atual para ambos (com ajuste de fuso horário)
+        if (!dataInicio || !dataFim) {
+            const today = new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
+            dataInicio = today;
+            dataFim = today;
+        }
+
+        // Formatação das datas para exibição
+        let [anoInicio, mesInicio, diaInicio] = dataInicio.split('-');
+        let dataInicioFormatada = `${diaInicio}/${mesInicio}/${anoInicio}`;
+        let [anoFim, mesFim, diaFim] = dataFim.split('-');
+        let dataFimFormatada = `${diaFim}/${mesFim}/${anoFim}`;
+
+        // Condição de filtro para o Sequelize
+        const dataWhereCondition = {
+            dataAgendamento: {
+                [Sequelize.Op.between]: [dataInicio, dataFim]
+            }
+        };
 
         // > Consulta os promotores
         Agendamento.findAll({
@@ -62,18 +79,14 @@ module.exports = {
                 'promotor',
                 [Sequelize.fn('COUNT', Sequelize.col('id')), 'contagem']
             ],
-            where: {
-                dataAgendamento: dataConsulta
-            },
+            where: dataWhereCondition, // Usar a nova condição de data
             group: ['promotor'],
             order: [['contagem', 'DESC']]
         }).then(promotores => {
             // > Consulta os agendamentos
             Agendamento.findAll({
                 raw: true,
-                where: {
-                    dataAgendamento: dataConsulta
-                },
+                where: dataWhereCondition, // Usar a nova condição de data
                 order: [['horarioAgendamento', 'ASC']]
             }).then(agendamentos => {
                 // > Consulta os atendimentos
@@ -93,12 +106,17 @@ module.exports = {
                     res.render('agendamentos', {
                         agendamentos: agendamentosComCor,
                         promotores,
-                        dataAtual: dataConsulta,
-                        dataFiltradaFormatada,
-                        dataFiltrada
+                        dataInicio, // Passa as datas para o EJS
+                        dataFim, // Passa as datas para o EJS
+                        dataInicioFormatada,
+                        dataFimFormatada,
+                        dataAtual: dataFim // Mantido para compatibilidade se algo depender disso
                     });
                 });
             });
+        }).catch(error => {
+            console.error("Erro ao buscar agendamentos:", error);
+            res.status(500).send("Erro interno do servidor.");
         });
     },
 
