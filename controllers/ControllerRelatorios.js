@@ -36,7 +36,7 @@ module.exports = {
                         [Sequelize.Op.between]: [dataInicio, dataFim]
                     }
                 },
-                order: [['horarioAgendamento', 'ASC']]
+                order: [['dataAgendamento', 'ASC']]
             });
 
             // > Cria planilha Excel
