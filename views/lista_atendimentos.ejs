@@ -82,7 +82,7 @@
                                 <%= promotor.contagem %>
                             </span>
                         </div>
-                        <% }) %>
+                    <% }) %>
                 </div>
                 <hr class="text-white mt-3 w-75 text-center">
             </div>
@@ -100,7 +100,7 @@
 
                                         <% if (atendimento.conjuge && atendimento.conjuge.trim() !=='') { %>
                                             & <%= atendimento.conjuge %>
-                                        <% } %>
+                                                <% } %>
                                 </span>
                                 <span class="d-inline-block rounded-circle ms-1 mb-2 <%= atendimento.classeCor %>"
                                     style="width: 12px; height: 12px; cursor: pointer;" data-bs-toggle="tooltip"
@@ -119,7 +119,7 @@
                             <br><br>
                             <div class="col-auto p-0 me-3">
                                 <form action="/del_ficha" method="post" class="form-del-item bg-transparent border-0"
-                                    data-id="<%= atendimento.id %>">
+                                    data-id="<%= atendimento.id %>" data-action="single">
                                     <a href="/atendimento/editar/<%= atendimento.id %>"
                                         class="text-white text-decoration-none edit-item">
                                         <i class="bi bi-pencil me-2" data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -144,18 +144,17 @@
                                 <div class="modal-dialog border-0">
                                     <div class="modal-content bg-dark">
                                         <div class="modal-header d-flex flex-column align-items-start border-0">
-                                            <p class="text-white fs-4 mb-0" id="modalLabel">
+                                            <p class="text-white fs-4 mb-0" id="modalTitle">
                                                 <i class="bi bi-exclamation-circle fs-4 text-danger fw-semibold"></i>
                                                 Tem certeza?
                                             </p>
-                                            <p class="text-danger mb-0">Essa ação não poderá ser desfeita</p>
+                                            <p class="text-danger mb-0">Essa ação apagará todas as informações do banco de dados e não poderá ser desfeita...</p>
                                         </div>
                                         <div class="modal-body border-0">
                                             <label for="inputDelItem" class="text-white fw-semibold mb-3">
-                                                > Digite 'deletar' para confirmar a exclusão
+                                                > Confirme a senha de acesso para excluir as informações
                                             </label>
-                                            <input type="text" class="input-del-item" id="inputDelItem"
-                                                placeholder="deletar">
+                                            <input type="password" class="input-del-item" id="inputDelItem" placeholder="deletar">
                                         </div>
                                         <div class="modal-footer border-0 d-flex justify-content-start">
                                             <button type="button"
@@ -181,6 +180,14 @@
                     <a href="#top" class="nav-link text-white fs-6 link-top ff-sora fw-light">
                         <i class="bi bi-arrow-up text-white fs-6"></i> Voltar ao Topo
                     </a>
+                </div>
+                <div class="col-1 w-auto">
+                    <form action="/clear_data" method="post" id="formClearData" data-action="all">
+                        <button type="button" class="btn bg-transparent border-0 btn-open-modal-all"
+                            data-bs-toggle="modal" data-bs-target="#modalDelItem">
+                            <i class="bi bi-trash3 text-white del-item fs-5"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

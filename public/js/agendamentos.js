@@ -15,13 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // > Botão de confirmação de exclusão dentro do modal
     document.querySelector('.btn-confirm-del').addEventListener('click', () => {
-        const inputDelItem = document.getElementById('inputDelItem').value.trim().toLowerCase();
-        if (inputDelItem === 'deletar') {
+        const inputDelItem = document.getElementById('inputDelItem').value;
+        if (inputDelItem === 'mt#2025') {
             if (formDelItem) {
                 formDelItem.submit()
             }
         } else {
-            alert("Você precisa confirmar a exclusão.");
+            alert("Senha errada! Não tente novamente");
         }
     });
 

@@ -213,6 +213,15 @@ module.exports = {
         }
     },
 
+    // > Exclusão total dos atendimentos
+    clear_data: (req, res) => {
+        Atendimento.destroy({
+            where: {}
+        }).then(() => {
+            res.redirect('/atendimentos')
+        })
+    },
+
     // > View para finalização de atendimento. Busca pelo ID
     info_atendimento: (req, res) => {
         const idAtendimento = req.params.idAtendimento;

@@ -79,14 +79,14 @@ module.exports = {
                 'promotor',
                 [Sequelize.fn('COUNT', Sequelize.col('id')), 'contagem']
             ],
-            where: dataWhereCondition, // Usar a nova condição de data
+            where: dataWhereCondition,
             group: ['promotor'],
             order: [['contagem', 'DESC']]
         }).then(promotores => {
             // > Consulta os agendamentos
             Agendamento.findAll({
                 raw: true,
-                where: dataWhereCondition, // Usar a nova condição de data
+                where: dataWhereCondition,
                 order: [['horarioAgendamento', 'ASC']]
             }).then(agendamentos => {
                 // > Consulta os atendimentos
@@ -106,11 +106,11 @@ module.exports = {
                     res.render('agendamentos', {
                         agendamentos: agendamentosComCor,
                         promotores,
-                        dataInicio, // Passa as datas para o EJS
-                        dataFim, // Passa as datas para o EJS
+                        dataInicio,
+                        dataFim,
                         dataInicioFormatada,
                         dataFimFormatada,
-                        dataAtual: dataFim // Mantido para compatibilidade se algo depender disso
+                        dataAtual: dataFim
                     });
                 });
             });
@@ -118,6 +118,96 @@ module.exports = {
             console.error("Erro ao buscar agendamentos:", error);
             res.status(500).send("Erro interno do servidor.");
         });
+    },
+
+    // > Lista todos os agendamentos por cada promotor
+    agendamentos_por_promotor: (req, res) => {
+        // Captura o nome do promotor da URL (ex: /agendamentos/promotor/Yan%20Bueno)
+        const promotorFiltro = req.params.promotor;
+
+        const coresPorPromotor = {
+            'PAULO CESAR': 'cor-paulo',
+            'Paulo Cesar': 'cor-paulo',
+            'paulo cesar': 'cor-paulo',
+            'TALITA LIMA': 'cor-talita',
+            'Talita Lima': 'cor-talita',
+            'talita lima': 'cor-talita',
+            'VINICIUS MANZZATO': 'cor-vinicius',
+            'Vinicius Manzzato': 'cor-vinicius',
+            'vinicius manzzato': 'cor-vinicius',
+            'YAN BUENO': 'cor-yan',
+            'Yan Bueno': 'cor-yan',
+            'yan bueno': 'cor-yan'
+        };
+
+        // > Formatação de datas para formato DD/MM/AAAA (reutilizado)
+        let { dataInicio, dataFim } = req.query;
+
+        // Se dataInicio ou dataFim não forem fornecidas, usa a data atual (com ajuste de fuso horário)
+        if (!dataInicio || !dataFim) {
+            const today = new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
+            dataInicio = today;
+            dataFim = today;
+        }
+
+        // > Formatação das datas para exibição (reutilizado)
+        let [anoInicio, mesInicio, diaInicio] = dataInicio.split('-');
+        let dataInicioFormatada = `${diaInicio}/${mesInicio}/${anoInicio}`;
+        let [anoFim, mesFim, diaFim] = dataFim.split('-');
+        let dataFimFormatada = `${diaFim}/${mesFim}/${anoFim}`;
+
+        // > Condição de filtro para o Sequelize (com adição do filtro por promotor)
+        const whereCondition = {
+            dataAgendamento: {
+                [Sequelize.Op.between]: [dataInicio, dataFim]
+            },
+            promotor: promotorFiltro // > Adiciona o filtro pelo nome do promotor
+        };
+
+        // > Consulta os agendamentos para o promotor específico e intervalo de datas
+        Agendamento.findAll({
+            raw: true,
+            where: whereCondition,
+            order: [['horarioAgendamento', 'ASC']]
+        })
+            .then(agendamentos => {
+                // > Consulta os atendimentos (para saber o status de finalização)
+                Atendimento.findAll({ raw: true })
+                    .then(atendimentos => {
+                        const agendamentosComCor = agendamentos.map(a => {
+                            const atendimento = atendimentos.find(at => at.id === a.id);
+                            const atendido = !!atendimento;
+                            const finalizado = atendimento && atendimento.clienteAtendido === "true";
+                            return {
+                                ...a,
+                                classeTexto: atendido ? 'texto-atendido' : '',
+                                classeCor: coresPorPromotor[a.promotor] || 'cor-padrao',
+                                statusFinalizacao: atendido ? (finalizado ? 'Finalizado' : 'Não finalizado') : ''
+                            };
+                        });
+
+                        // > Renderiza a view com os agendamentos filtrados
+                        res.render('agendamentos_por_promotor', { 
+                            agendamentos: agendamentosComCor,
+                            // > Passa o nome do promotor para a view
+                            promotorAtual: promotorFiltro, 
+                            dataInicio,
+                            dataFim,
+                            dataInicioFormatada,
+                            dataFimFormatada,
+                            // > Mantém consistência com o outro método
+                            dataAtual: dataFim 
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Erro ao buscar atendimentos para agendamentos do promotor:", error);
+                        res.status(500).send("Erro interno do servidor ao consultar atendimentos.");
+                    });
+            })
+            .catch(error => {
+                console.error("Erro ao buscar agendamentos do promotor:", error);
+                res.status(500).send("Erro interno do servidor ao consultar agendamentos.");
+            });
     },
 
     // > View para edição de informações do agendamento

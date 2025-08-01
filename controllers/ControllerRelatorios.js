@@ -85,15 +85,13 @@ module.exports = {
         }
     },
 
-
-    // > Relatório de Atendimentos por data filtrada ou data atual, filtrando apenas clientes com qualificacao = "Q"
+    // > Relatório de Atendimentos por intervalo de datas
     relatorio_atendimentos: async (req, res) => {
         const { Op } = require('sequelize')
         try {
             // > Obtém as datas de início e fim do filtro da requisição
             // > Se não houver data de início, usa a data atual (UTC-3)
             const dataInicioFiltro = req.query.dataInicio || new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
-
             // > Se não houver data de fim, usa a data de início do filtro como data final
             const dataFimFiltro = req.query.dataFim || dataInicioFiltro;
 
@@ -101,15 +99,16 @@ module.exports = {
             const atendimentos = await Atendimento.findAll({
                 raw: true,
                 where: {
+                    // > O campo 'dataAtendimento' é do tipo DATEONLY, então comparamos diretamente as strings YYYY-MM-DD
                     dataAtendimento: {
                         [Op.between]: [dataInicioFiltro, dataFimFiltro]
                     },
-                    qualificacao: "Q" // > Filtra apenas atendimentos com qualificacao = "Q"
+                    qualificacao: "Q" // Filtra apenas atendimentos com qualificacao = "Q"
                 },
                 order: [['updatedAt', 'ASC']]
             });
 
-            // Log para depuração: Contagem de registros encontrados
+            // Log para depuração: Verifique o que vem do banco
             console.log(`\n\nAtendimentos encontrados para o período de ${dataInicioFiltro} a ${dataFimFiltro}: ${atendimentos.length}`);
 
             // > Cria planilha Excel

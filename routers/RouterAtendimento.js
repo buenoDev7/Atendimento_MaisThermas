@@ -11,11 +11,14 @@ router.post('/ficha_atendimento', ControllerAtendimento.salvarFicha);
 // > Exibir ficha preenchida
 router.get('/ficha/:id', ControllerAtendimento.exibirFicha);
 
-// > Exibir lista de atendimentos por data atual e filtrada
+// > Exibir lista de atendimentos
 router.get('/atendimentos', ControllerAtendimento.listarAtendimentos);
 
 // > Excluir atendimento
 router.post('/del_ficha', ControllerAtendimento.excluir_atendimento);
+
+// > Excluir todos os atendimentos
+router.post('/clear_data', ControllerAtendimento.clear_data);
 
 // > View para editar informações do atendimento
 router.get('/atendimento/editar/:idAtendimento', ControllerAtendimento.editar_atendimento);
