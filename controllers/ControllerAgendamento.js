@@ -168,7 +168,7 @@ module.exports = {
         Agendamento.findAll({
             raw: true,
             where: whereCondition,
-            order: [['horarioAgendamento', 'ASC']]
+            order: [['dataAgendamento', 'ASC']]
         })
             .then(agendamentos => {
                 // > Consulta os atendimentos (para saber o status de finalização)
