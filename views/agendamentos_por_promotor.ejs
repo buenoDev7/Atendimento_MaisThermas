@@ -133,6 +133,9 @@
                                 </ul>
                             </div>
                         </div>
+                        <span class="text-white ff-sora fw-light">
+                            <%= new Date(agendamento.dataAgendamento).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) %>
+                        </span>
                     </div>
                     <hr class="text-secondary my-3">
                 <% }) %>
