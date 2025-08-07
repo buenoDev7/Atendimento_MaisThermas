@@ -25,7 +25,7 @@
                 <h2 class="ff-philomene yellow mt-3">
                     <% if (promotorAtual) { %>
                         <%= atendimentos.length %>
-                        <%= atendimentos.length === 1 ? ' ATENDIMENTO' : ' ATENDIMENTOS' %> FINALIZADOS DE <%= promotorAtual.toUpperCase().split(' ')[0] %> -
+                        <%= atendimentos.length === 1 ? ' ATENDIMENTO' : ' ATENDIMENTOS' %> DE <%= promotorAtual.toUpperCase().split(' ')[0] %> -
                     <% } %>
                     <% if (dataInicio === dataFim) { %>
                         <%= dataInicioFormatada %>
