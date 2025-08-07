@@ -75,9 +75,9 @@
                 <div class="col-12 text-center d-flex flex-row justify-content-around mt-2 flex-nowrap">
                     <% promotores.forEach(promotor=> { %>
                         <div class="col-auto">
-                            <span class="fs-6 text-white ff-sora">
+                            <a href="/atendimentos/<%= promotor.promotor %>" class="fs-6 text-white ff-sora text-decoration-none">
                                 <%= promotor.promotor.split(' ')[0] %>:
-                            </span>
+                            </a>
                             <span class="fs-6 text-white ff-sora">
                                 <%= promotor.contagem %>
                             </span>
