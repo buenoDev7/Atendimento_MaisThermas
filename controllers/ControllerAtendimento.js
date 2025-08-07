@@ -172,6 +172,76 @@ module.exports = {
         }
     },
 
+    // > Lista todos os atendimentos por cada promotor
+    atendimentos_por_promotor: async (req, res) => {
+        const promotorFiltro = req.params.promotor;
+
+        const coresPorPromotor = {
+            'PAULO CESAR': 'cor-paulo',
+            'Paulo Cesar': 'cor-paulo',
+            'paulo cesar': 'cor-paulo',
+            'TALITA LIMA': 'cor-talita',
+            'Talita Lima': 'cor-talita',
+            'talita lima': 'cor-talita',
+            'VINICIUS MANZZATO': 'cor-vinicius',
+            'Vinicius Manzzato': 'cor-vinicius',
+            'vinicius manzzato': 'cor-vinicius',
+            'YAN BUENO': 'cor-yan',
+            'Yan Bueno': 'cor-yan',
+            'yan bueno': 'cor-yan'
+        };
+
+        let { dataInicio, dataFim } = req.query;
+
+        if (!dataInicio || !dataFim) {
+            const today = new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
+            dataInicio = today;
+            dataFim = today;
+        }
+
+        let [anoInicio, mesInicio, diaInicio] = dataInicio.split('-');
+        let dataInicioFormatada = `${diaInicio}/${mesInicio}/${anoInicio}`;
+        let [anoFim, mesFim, diaFim] = dataFim.split('-');
+        let dataFimFormatada = `${diaFim}/${mesFim}/${anoFim}`;
+
+        // Converte as datas para o formato de consulta do Sequelize
+        const dataInicioISO = new Date(dataInicio + 'T00:00:00.000Z');
+        const dataFimISO = new Date(dataFim + 'T23:59:59.999Z');
+
+        const whereCondition = {
+            dataHora: {
+                [Sequelize.Op.between]: [dataInicioISO, dataFimISO]
+            },
+            promotor: promotorFiltro,
+            clienteAtendido: "true"
+        };
+
+        try {
+            const atendimentos = await Atendimento.findAll({
+                raw: true,
+                where: whereCondition,
+                order: [['dataAtendimento', 'ASC']]
+            });
+
+            const atendimentosComCor = atendimentos.map(a => ({
+                ...a,
+                classeCor: coresPorPromotor[a.promotor] || 'cor-padrao'
+            }));
+
+            res.render('atendimentos_por_promotor', {
+                atendimentos: atendimentosComCor,
+                promotorAtual: promotorFiltro,
+                dataInicio,
+                dataFim,
+                dataInicioFormatada,
+                dataFimFormatada
+            });
+        } catch (error) {
+            console.error("Erro ao buscar atendimentos do promotor:", error);
+            res.status(500).send("Erro interno do servidor ao consultar atendimentos.");
+        }
+    },
+
     // > View para edição de ficha já preenchida
     editar_atendimento: (req, res) => {
         const idAtendimento = req.params.idAtendimento;

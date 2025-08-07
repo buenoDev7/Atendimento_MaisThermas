@@ -14,6 +14,9 @@ router.get('/ficha/:id', ControllerAtendimento.exibirFicha);
 // > Exibir lista de atendimentos
 router.get('/atendimentos', ControllerAtendimento.listarAtendimentos);
 
+// > Exibir lista de atendimentos individuais por promotor
+router.get('/atendimentos/:promotor', ControllerAtendimento.atendimentos_por_promotor);
+
 // > Excluir atendimento
 router.post('/del_ficha', ControllerAtendimento.excluir_atendimento);
 
