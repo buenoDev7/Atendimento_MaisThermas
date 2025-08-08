@@ -28,10 +28,12 @@
                     <div class="circle-container">
                         <div class="circle" style="--percentage: <%= countAtendimentos.toFixed(2) %>%;" 
                             data-bs-toggle="tooltip" 
-                            data-bs-title="<%=countAtendimentos.toFixed(1)%>% dos agendamentos foram atendidos" 
+                            data-bs-title="<%= isNaN(countAtendimentos) ? 0 : countAtendimentos.toFixed(1) %>% dos agendamentos foram atendidos" 
                             data-bs-placement="right">
                             <span class="percentage-text ff-sora">
-                                <%= countAtendimentos.toFixed(1) %>%
+                                <span class="percentage-text ff-sora">
+                                    <%= isNaN(countAtendimentos) ? 0 : countAtendimentos.toFixed(1) %>%
+                                </span>
                             </span>
                         </div>
                     </div>

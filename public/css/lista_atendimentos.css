@@ -234,7 +234,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .percentage-text {
     color: white;
-    font-size: 12px;
+    font-size: 11px;
     z-index: 1;
 }
 
