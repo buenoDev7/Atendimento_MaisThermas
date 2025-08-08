@@ -18,11 +18,23 @@
 </head>
 
 <body>
-    <% let dataAtual=new Date().toLocaleDateString('pt-BR'); %>
+    <% let dataAtual=new Date().toLocaleDateString('pt-BR') %>
+    <% let totalAgendamentos = agendamentos.length %> 
+    <% let totalAtendimentos = atendimentos.length %>
+    <% let countAtendimentos = (totalAtendimentos / totalAgendamentos) * 100 %>
         <div class="container-fluid" id="top">
             <div class="row d-flex justify-content-center">
-                <div
-                    class="col-10 w-auto d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start mt-3 text-center text-md-start">
+                <div class="col-10 w-auto d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start mt-3 text-center text-md-start">
+                    <div class="circle-container">
+                        <div class="circle" style="--percentage: <%= countAtendimentos.toFixed(2) %>%;" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-title="<%=countAtendimentos.toFixed(1)%>% dos agendamentos foram atendidos" 
+                            data-bs-placement="right">
+                            <span class="percentage-text ff-sora">
+                                <%= countAtendimentos.toFixed(1) %>%
+                            </span>
+                        </div>
+                    </div>
                     <img src="/img/maisThermas.png" class="maisThermas-header me-3">
                     <h2 class="ff-philomene yellow mt-3">
                         <%= atendimentos.length %>

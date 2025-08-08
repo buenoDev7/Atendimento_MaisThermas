@@ -158,7 +158,19 @@ module.exports = {
                 classeCor: coresPorPromotor[a.promotor] || 'cor-padrao'
             }));
 
+            // > Busca todos os agendamentos do dia filtrado
+            // > Para exibir estatísticas de agendamentos/atendimentos
+            const agendamentos = await Agendamento.findAll({
+                raw: true,
+                where: {
+                    dataAgendamento: {
+                        [Op.between]: [dataInicio, dataFim]
+                    }
+                }
+            });
+
             res.render('lista_atendimentos', {
+                agendamentos,
                 atendimentos: atendimentosComCor,
                 promotores,
                 dataInicioFiltro,
