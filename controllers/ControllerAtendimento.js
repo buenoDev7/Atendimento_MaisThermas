@@ -164,7 +164,8 @@ module.exports = {
                 raw: true,
                 where: {
                     dataAgendamento: {
-                        [Op.between]: [dataInicio, dataFim]
+                        // > Busca os agendamentos usando strings na data, para evitar bugs de fuso horário -3h
+                        [Op.between]: [dataInicioFiltro, dataFimFiltro] 
                     }
                 }
             });
