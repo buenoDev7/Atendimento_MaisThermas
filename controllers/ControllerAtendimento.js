@@ -165,7 +165,7 @@ module.exports = {
                 where: {
                     dataAgendamento: {
                         // > Busca os agendamentos usando strings na data, para evitar bugs de fuso horário -3h
-                        [Op.between]: [dataInicioFiltro, dataFimFiltro] 
+                        [Op.between]: [dataInicioFiltro, dataFimFiltro]
                     }
                 }
             });
@@ -241,7 +241,21 @@ module.exports = {
                 classeCor: coresPorPromotor[a.promotor] || 'cor-padrao'
             }));
 
+            // > Busca todos os agendamentos do dia filtrado por promotor
+            // > Para exibir estatísticas de agendamentos/atendimentos
+            const agendamentos = await Agendamento.findAll({
+                raw: true,
+                where: {
+                    promotor: promotorFiltro,
+                    dataAgendamento: {
+                        // > Busca os agendamentos usando strings na data, para evitar bugs de fuso horário -3h
+                        [Op.between]: [dataInicio, dataFim]
+                    }
+                }
+            });
+
             res.render('atendimentos_por_promotor', {
+                agendamentos,
                 atendimentos: atendimentosComCor,
                 promotorAtual: promotorFiltro,
                 dataInicio,
@@ -251,7 +265,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Erro ao buscar atendimentos do promotor:", error);
-            res.status(500).send("Erro interno do servidor ao consultar atendimentos.");
+            res.status(500).send(`Erro interno do servidor ao consultar atendimentos: ${error}.`);
         }
     },
 
