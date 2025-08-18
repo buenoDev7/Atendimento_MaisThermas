@@ -122,7 +122,7 @@ module.exports = {
 
     // > Lista todos os agendamentos por cada promotor
     agendamentos_por_promotor: (req, res) => {
-        // Captura o nome do promotor da URL 
+        // > Captura o nome do promotor da URL 
         const promotorFiltro = req.params.promotor;
 
         const coresPorPromotor = {
@@ -143,7 +143,7 @@ module.exports = {
         // > Formatação de datas para formato DD/MM/AAAA
         let { dataInicio, dataFim } = req.query;
 
-        // Se dataInicio ou dataFim não forem fornecidas, usa a data atual (com ajuste de fuso horário)
+        // > Se dataInicio ou dataFim não forem fornecidas, usa a data atual (com ajuste de fuso horário)
         if (!dataInicio || !dataFim) {
             const today = new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().split('T')[0];
             dataInicio = today;
@@ -156,23 +156,39 @@ module.exports = {
         let [anoFim, mesFim, diaFim] = dataFim.split('-');
         let dataFimFormatada = `${diaFim}/${mesFim}/${anoFim}`;
 
-        // > Condição de filtro para o Sequelize (com adição do filtro por promotor)
-        const whereCondition = {
+        // > Condição de filtro para a tabela de Agendamentos
+        const agendamentoCondition = {
             dataAgendamento: {
                 [Sequelize.Op.between]: [dataInicio, dataFim]
             },
-            // > Adiciona o filtro pelo nome do promotor
             promotor: promotorFiltro
+        };
+
+        // > Condição de filtro para a tabela de Atendimentos
+        const atendimentoCondition = {
+            promotor: promotorFiltro,
+            clienteAtendido: "true", // > Já filtra para clientes atendidos (finalizados)
+            dataAtendimento: {
+                [Sequelize.Op.between]: [dataInicio, dataFim]
+            }
         };
 
         // > Consulta os agendamentos para o promotor específico e intervalo de datas
         Agendamento.findAll({
             raw: true,
-            where: whereCondition,
-            order: [['dataAgendamento', 'ASC']]
+            where: agendamentoCondition,
+            order: [['dataAgendamento', 'DESC']]
         }).then(agendamentos => {
-            // > Busca todos os atendimentos (para saber o status de finalização)
-            Atendimento.findAll({ raw: true }).then(atendimentos => {
+            // > Busca os atendimentos somente para a data e promotor filtrados
+            Atendimento.findAll({
+                raw: true,
+                where: {
+                    promotor: promotorFiltro,
+                    dataAtendimento: {
+                        [Sequelize.Op.between]: [dataInicio, dataFim]
+                    }
+                }
+            }).then(atendimentos => {
                 const agendamentosComCor = agendamentos.map(a => {
                     const atendimento = atendimentos.find(at => at.id === a.id);
                     const atendido = !!atendimento;
@@ -186,7 +202,9 @@ module.exports = {
                 });
 
                 // > Contabiliza o número de atendimentos finalizados
-                const totalAtendimentos = atendimentos.filter(a => a.promotor === promotorFiltro && a.clienteAtendido === "true").length;
+                const totalAtendimentos = atendimentos.filter(a => a.clienteAtendido === "true").length;
+                const totalAgendamentos = agendamentos.length;
+                const countAtendimentos = (totalAtendimentos / totalAgendamentos) * 100;
 
                 // > Renderiza a view com os agendamentos filtrados
                 res.render('agendamentos_por_promotor', {
@@ -199,6 +217,8 @@ module.exports = {
                     dataFimFormatada,
                     // > Passa a contagem de atendimentos para a view
                     totalAtendimentos: totalAtendimentos,
+                    totalAgendamentos: totalAgendamentos,
+                    countAtendimentos: countAtendimentos
                 });
             }).catch(error => {
                 console.error("Erro ao buscar atendimentos para agendamentos do promotor:", error);
