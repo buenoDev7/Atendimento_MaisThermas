@@ -12,7 +12,7 @@ html {
 body {
     min-height: 100vh;
     max-height: 10000vh;
-    background-image: url('../img/wpp_ficha2.png');
+    background-image: url('../img/wpp_ficha2.webp');
     background-size: cover;
     backdrop-filter: brightness(.3) blur(3px);
     padding-bottom: 30px;

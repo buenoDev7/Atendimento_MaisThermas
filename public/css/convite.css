@@ -11,7 +11,7 @@ html {
 
 body {
     height: 100%;
-    background-image: url('../img/wpp_ficha2.png');
+    background-image: url('../img/wpp_ficha2.webp');
     background-position: center;
     background-size: contain;
     backdrop-filter: blur(8px) brightness(.2);
@@ -88,7 +88,7 @@ body {
 .conviteTalita {
     height: 100vh;
     max-width: 500px;
-    background-image: url('../img/wpp_convite_talita.png');
+    background-image: url('../img/wpp_convite_talita.webp');
     background-size: cover;
     background-position: top;
     padding: 50px 0px 50px 0px;
@@ -139,7 +139,7 @@ body {
 .conviteVinicius {
     height: 100vh;
     max-width: 500px;
-    background-image: url('../img/wpp_convite_vinicius.png');
+    background-image: url('../img/wpp_convite_vinicius.webp');
     background-size: cover;
     background-position: top;
     padding: 50px 0px 50px 0px;

@@ -34,7 +34,7 @@
     .container-verso {
         margin: 0 auto;
         padding: 0 auto;
-        background-image: url('../img/fundo_verso2.png');
+        background-image: url('../img/fundo_verso2.webp');
         background-position: top;
         background-size: contain;
         background-repeat: no-repeat;
@@ -56,7 +56,7 @@ body {
     min-height: 100vh;
     max-height: 10000vh;
     backdrop-filter: brightness(.2) blur(3px);
-    background-image: url('../img/wpp_ficha2.png');
+    background-image: url('../img/wpp_ficha2.webp');
     background-size: cover;
     letter-spacing: 1px;
 }
@@ -78,7 +78,7 @@ body {
 }
 
 .form-ficha {
-    background-image: url('../img/fundo-ficha.png');
+    background-image: url('../img/fundo-ficha.webp');
     background-position: top;
     background-size: cover;
 
@@ -133,7 +133,7 @@ a:hover {
     max-width: 725px;
     height: 1020px;
     margin: 0 auto;
-    background-image: url('../img/fundo_verso2.png');
+    background-image: url('../img/fundo_verso2.webp');
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;

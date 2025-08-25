@@ -10,7 +10,7 @@ html {
 }
 
 body {
-    background-image: url('../img/wpp_ficha2.png');
+    background-image: url('../img/wpp_ficha2.webp');
     background-size: cover;
     backdrop-filter: blur(4px) brightness(.2);
     height: 100%;
